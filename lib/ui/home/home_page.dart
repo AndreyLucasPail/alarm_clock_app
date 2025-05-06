@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
       height: 80,
       width: 80,
       child: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => selectAlarmTimeDialog(),
         backgroundColor: CustomColors.redOrange,
         shape: CircleBorder(),
         child: Icon(Icons.add, color: CustomColors.white, size: 40),
@@ -61,6 +61,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget alarmRow() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         alarmCard(),
         Transform.rotate(
@@ -79,6 +80,15 @@ class _HomePageState extends State<HomePage> {
         color: CustomColors.supernova,
         borderRadius: BorderRadius.circular(40.0),
       ),
+    );
+  }
+
+  Future selectAlarmTimeDialog() {
+    return showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Container(height: MediaQuery.of(context).size.height * 0.6);
+      },
     );
   }
 }
