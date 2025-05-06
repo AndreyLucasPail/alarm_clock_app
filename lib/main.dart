@@ -1,3 +1,4 @@
+import 'package:alarm_clock_app/ui/home/home_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -9,6 +10,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: const MyHomePage(title: 'Flutter Demo Home Page'));
+    return MaterialApp(
+      home: const HomePage(),
+      debugShowCheckedModeBanner: false,
+    );
   }
 }

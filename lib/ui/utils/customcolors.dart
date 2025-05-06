@@ -1,0 +1,10 @@
+import 'package:flutter/material.dart';
+
+class CustomColors {
+  static const Color black = Color(0xFF000000);
+  static const Color white = Color(0xFFFFFFFF);
+  static const Color rotPurple = Color(0xFF432344);
+  static const Color redOrange = Color(0xFFFF2525);
+  static const Color lavender = Color(0xFFE7EEFB);
+  static const Color supernova = Color(0xFFFFC03D);
+}
