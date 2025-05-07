@@ -48,8 +48,8 @@ class _HomePageState extends State<HomePage> {
 
   Widget floatingButton() {
     return SizedBox(
-      height: 80,
-      width: 80,
+      height: 70,
+      width: 70,
       child: FloatingActionButton(
         onPressed: () => selectAlarmTimeDialog(),
         backgroundColor: CustomColors.redOrange,
