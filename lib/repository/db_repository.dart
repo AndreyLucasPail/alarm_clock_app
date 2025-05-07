@@ -43,4 +43,14 @@ class DataBaseRepository {
 
     return alarmClockDb;
   }
+
+  Future<List<Map<String, dynamic>>> getAlarms() async {
+    Database? alarmsDb = await db;
+
+    final List<Map<String, dynamic>> result = await alarmsDb!.query(
+      alarmClockTable,
+    );
+
+    return result;
+  }
 }
