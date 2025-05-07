@@ -1,3 +1,4 @@
+import 'package:alarm_clock_app/model/alarm_clock_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -52,5 +53,30 @@ class DataBaseRepository {
     );
 
     return result;
+  }
+
+  Future<void> insertNewAlarm(AlarmClockModel alarmClockModel) async {
+    Database? alarmDb = await db;
+
+    Map<String, dynamic> addNewAlarm = alarmClockModel.toJson();
+
+    await alarmDb!.insert(alarmClockTable, addNewAlarm);
+  }
+
+  Future<void> deleteAlarm(int alarmId) async {
+    Database? alarmDb = await db;
+
+    alarmDb!.delete(alarmClockTable, where: "$id = ?", whereArgs: [alarmId]);
+  }
+
+  Future<void> updateAlarm(AlarmClockModel alarm) async {
+    Database? alarmDb = await db;
+
+    alarmDb!.update(
+      alarmClockTable,
+      alarm.toJson(),
+      where: "$id = ?",
+      whereArgs: [alarm.id],
+    );
   }
 }

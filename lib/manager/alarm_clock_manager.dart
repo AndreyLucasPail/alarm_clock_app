@@ -18,4 +18,30 @@ class AlarmClockManager extends ChangeNotifier {
       print("Não foi possivel buscar alarmes :$e manager");
     }
   }
+
+  Future<void> newAlarm(AlarmClockModel newAlarm) async {
+    try {
+      await dataBaseRepository.insertNewAlarm(newAlarm);
+      notifyListeners();
+    } catch (e) {
+      print("Não foi possivel adicionar alarme :$e manager");
+    }
+  }
+
+  Future<void> delete(int alarmId) async {
+    try {
+      await dataBaseRepository.deleteAlarm(alarmId);
+      notifyListeners();
+    } catch (e) {
+      print("Não foi possivel deletar alarme :$e manager");
+    }
+  }
+
+  Future<void> update(AlarmClockModel alarm) async {
+    try {
+      await dataBaseRepository.updateAlarm(alarm);
+    } catch (e) {
+      print("Não foi possivel editar alarme :$e manager");
+    }
+  }
 }
