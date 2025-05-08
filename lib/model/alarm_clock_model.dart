@@ -1,11 +1,19 @@
 class AlarmClockModel {
-  AlarmClockModel({this.id, this.hour, this.minute, this.title, this.vibrate});
+  AlarmClockModel({
+    this.id,
+    this.hour,
+    this.minute,
+    this.title,
+    this.vibrate,
+    this.activate,
+  });
 
   int? id;
   int? hour;
   int? minute;
   String? title = "";
   bool? vibrate = true;
+  bool? activate = false;
 
   factory AlarmClockModel.fromJson(Map<String, dynamic> json) {
     return AlarmClockModel(
@@ -14,6 +22,7 @@ class AlarmClockModel {
       minute: json["minuteColumn"],
       title: json["titleColumn"],
       vibrate: json["vibrateColumn"],
+      activate: json["activateColumn"],
     );
   }
 
@@ -24,6 +33,7 @@ class AlarmClockModel {
       "minuteColumn": minute,
       "titleColumn": title,
       "vibrateColumn": vibrate,
+      "activateColumn": activate,
     };
   }
 }

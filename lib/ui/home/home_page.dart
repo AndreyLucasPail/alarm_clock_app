@@ -9,6 +9,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool activateB = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,23 +64,44 @@ class _HomePageState extends State<HomePage> {
   Widget alarmRow() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        alarmCard(),
-        Transform.rotate(
-          angle: -3.12 / 2,
-          child: Switch(value: false, onChanged: (value) {}),
-        ),
-      ],
+      children: [alarmCard(), switchButton()],
     );
   }
 
   Widget alarmCard() {
     return Container(
       height: 260,
-      width: 250,
+      width: 230,
       decoration: BoxDecoration(
         color: CustomColors.supernova,
         borderRadius: BorderRadius.circular(40.0),
+      ),
+    );
+  }
+
+  Widget switchButton() {
+    return Flexible(
+      child: SizedBox(
+        height: 170,
+        width: 170,
+        child: Transform.rotate(
+          angle: -3.12 / 2,
+          child: FittedBox(
+            fit: BoxFit.fill,
+            child: Switch.adaptive(
+              value: activateB,
+              onChanged: (value) {
+                setState(() {
+                  activateB = value;
+                });
+              },
+              activeColor: CustomColors.supernova,
+              activeTrackColor: CustomColors.white,
+              inactiveThumbColor: CustomColors.rotPurple,
+              inactiveTrackColor: CustomColors.white,
+            ),
+          ),
+        ),
       ),
     );
   }
