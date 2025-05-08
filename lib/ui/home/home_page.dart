@@ -1,4 +1,5 @@
 import 'package:alarm_clock_app/ui/utils/customcolors.dart';
+import 'package:alarm_clock_app/widgets/custom_switch.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -64,7 +65,17 @@ class _HomePageState extends State<HomePage> {
   Widget alarmRow() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [alarmCard(), switchButton()],
+      children: [
+        alarmCard(),
+        CustomSwitch(
+          value: activateB,
+          valueChanged: (bool value) {
+            setState(() {
+              activateB = value;
+            });
+          },
+        ),
+      ],
     );
   }
 
@@ -79,32 +90,32 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget switchButton() {
-    return Flexible(
-      child: SizedBox(
-        height: 170,
-        width: 170,
-        child: Transform.rotate(
-          angle: -3.12 / 2,
-          child: FittedBox(
-            fit: BoxFit.fill,
-            child: Switch.adaptive(
-              value: activateB,
-              onChanged: (value) {
-                setState(() {
-                  activateB = value;
-                });
-              },
-              activeColor: CustomColors.supernova,
-              activeTrackColor: CustomColors.white,
-              inactiveThumbColor: CustomColors.rotPurple,
-              inactiveTrackColor: CustomColors.white,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget switchButton() {
+  //   return Flexible(
+  //     child: SizedBox(
+  //       height: 170,
+  //       width: 170,
+  //       child: Transform.rotate(
+  //         angle: -3.12 / 2,
+  //         child: FittedBox(
+  //           fit: BoxFit.fill,
+  //           child: Switch.adaptive(
+  //             value: activateB,
+  //             onChanged: (value) {
+  //               setState(() {
+  //                 activateB = value;
+  //               });
+  //             },
+  //             activeColor: CustomColors.supernova,
+  //             activeTrackColor: CustomColors.white,
+  //             inactiveThumbColor: CustomColors.rotPurple,
+  //             inactiveTrackColor: CustomColors.white,
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Future selectAlarmTimeDialog() {
     return showModalBottomSheet(
