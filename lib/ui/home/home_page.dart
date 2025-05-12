@@ -1,7 +1,9 @@
+import 'package:alarm_clock_app/manager/alarm_clock_manager.dart';
 import 'package:alarm_clock_app/mixins/home_mixin.dart';
 import 'package:alarm_clock_app/ui/utils/customcolors.dart';
 import 'package:alarm_clock_app/widgets/custom_switch.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,20 +21,28 @@ class _HomePageState extends State<HomePage> with HomeMixin {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: CustomColors.white,
       appBar: appBar(),
       body: body(),
-      floatingActionButton: floatingButton(),
+      endDrawer: customLeftDrawer(),
+      floatingActionButton: floatingButton(scaffoldKey),
     );
   }
 
   Widget body() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(children: [alarmRow()]),
-      ),
+    return Consumer<AlarmClockManager>(
+      builder: (_, manager, __) {
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(children: [alarmRow()]),
+          ),
+        );
+      },
     );
   }
 
@@ -54,12 +64,14 @@ class _HomePageState extends State<HomePage> with HomeMixin {
     );
   }
 
-  Widget floatingButton() {
+  Widget floatingButton(GlobalKey<ScaffoldState> scaffoldKey) {
     return SizedBox(
       height: 70,
       width: 70,
       child: FloatingActionButton(
-        onPressed: () => selectAlarmTimeDialog(),
+        onPressed: () {
+          scaffoldKey.currentState!.openDrawer();
+        },
         backgroundColor: CustomColors.redOrange,
         shape: CircleBorder(),
         child: Icon(Icons.add, color: CustomColors.white, size: 40),
@@ -151,15 +163,19 @@ class _HomePageState extends State<HomePage> with HomeMixin {
     return ListWheelScrollView.useDelegate(
       controller: controller,
       itemExtent: 80,
-      childDelegate: ListWheelChildLoopingListDelegate(
-        children: List.generate(
-          generate,
-          (index) => Text(
+      childDelegate: ListWheelChildBuilderDelegate(
+        builder: (context, index) {
+          return Text(
             "${index + num}",
-            style: TextStyle(color: CustomColors.supernova),
-          ),
-        ),
+            style: TextStyle(color: CustomColors.black, fontSize: 24),
+          );
+        },
+        childCount: generate,
       ),
     );
+  }
+
+  Widget customLeftDrawer() {
+    return Drawer();
   }
 }
