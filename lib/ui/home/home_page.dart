@@ -1,3 +1,4 @@
+import 'package:alarm_clock_app/mixins/home_mixin.dart';
 import 'package:alarm_clock_app/ui/utils/customcolors.dart';
 import 'package:alarm_clock_app/widgets/custom_switch.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +10,12 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  bool activateB = false;
+class _HomePageState extends State<HomePage> with HomeMixin {
+  @override
+  void initState() {
+    super.initState();
+    initMixin();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,21 +99,66 @@ class _HomePageState extends State<HomePage> {
     return showModalBottomSheet(
       context: context,
       builder: (context) {
-        return Row(
-          children: [
-            Flexible(child: selectTimeScroll(24)),
-            Flexible(child: selectTimeScroll(60)),
-          ],
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            spacing: 6,
+            children: [
+              Flexible(
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    selectTimeScroll(24, 1, hourController),
+                    Container(
+                      height: 60,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: Colors.black38,
+                        borderRadius: BorderRadius.circular(24.0),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Flexible(
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    selectTimeScroll(60, 0, minuteController),
+                    Container(
+                      height: 60,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: Colors.black38,
+                        borderRadius: BorderRadius.circular(24.0),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
   }
 
-  Widget selectTimeScroll(int generate) {
+  Widget selectTimeScroll(
+    int generate,
+    int num,
+    FixedExtentScrollController controller,
+  ) {
     return ListWheelScrollView.useDelegate(
+      controller: controller,
       itemExtent: 80,
       childDelegate: ListWheelChildLoopingListDelegate(
-        children: List.generate(generate, (index) => Text("$index")),
+        children: List.generate(
+          generate,
+          (index) => Text(
+            "${index + num}",
+            style: TextStyle(color: CustomColors.supernova),
+          ),
+        ),
       ),
     );
   }
