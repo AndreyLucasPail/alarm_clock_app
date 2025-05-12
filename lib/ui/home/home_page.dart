@@ -90,39 +90,26 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Widget switchButton() {
-  //   return Flexible(
-  //     child: SizedBox(
-  //       height: 170,
-  //       width: 170,
-  //       child: Transform.rotate(
-  //         angle: -3.12 / 2,
-  //         child: FittedBox(
-  //           fit: BoxFit.fill,
-  //           child: Switch.adaptive(
-  //             value: activateB,
-  //             onChanged: (value) {
-  //               setState(() {
-  //                 activateB = value;
-  //               });
-  //             },
-  //             activeColor: CustomColors.supernova,
-  //             activeTrackColor: CustomColors.white,
-  //             inactiveThumbColor: CustomColors.rotPurple,
-  //             inactiveTrackColor: CustomColors.white,
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   Future selectAlarmTimeDialog() {
     return showModalBottomSheet(
       context: context,
       builder: (context) {
-        return Container(height: MediaQuery.of(context).size.height * 0.6);
+        return Row(
+          children: [
+            Flexible(child: selectTimeScroll(24)),
+            Flexible(child: selectTimeScroll(60)),
+          ],
+        );
       },
+    );
+  }
+
+  Widget selectTimeScroll(int generate) {
+    return ListWheelScrollView.useDelegate(
+      itemExtent: 80,
+      childDelegate: ListWheelChildLoopingListDelegate(
+        children: List.generate(generate, (index) => Text("$index")),
+      ),
     );
   }
 }
