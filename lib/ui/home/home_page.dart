@@ -1,5 +1,6 @@
 import 'package:alarm_clock_app/manager/alarm_clock_manager.dart';
 import 'package:alarm_clock_app/mixins/home_mixin.dart';
+import 'package:alarm_clock_app/ui/new_alarm/new_alarme_page.dart';
 import 'package:alarm_clock_app/ui/utils/customcolors.dart';
 import 'package:alarm_clock_app/widgets/custom_switch.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -8,6 +9,8 @@ import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  static const String tag = "/home";
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -89,7 +92,7 @@ class _HomePageState extends State<HomePage> with HomeMixin {
       height: 70,
       width: 70,
       child: FloatingActionButton(
-        onPressed: () => addNewAlarmTime(),
+        onPressed: () => Navigator.pushNamed(context, NewAlarmePage.tag),
         backgroundColor: CustomColors.redOrange,
         shape: CircleBorder(),
         child: Icon(Icons.add, color: CustomColors.white, size: 40),
@@ -130,50 +133,55 @@ class _HomePageState extends State<HomePage> with HomeMixin {
       context: context,
       builder: (context) {
         return SizedBox(
-          height: MediaQuery.of(context).size.height * 0.7,
+          height: MediaQuery.of(context).size.height,
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              spacing: 6,
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
               children: [
-                Flexible(
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      SizedBox(
-                        height: 200,
-                        child: selectTimeScroll(24, 1, hourController),
+                Row(
+                  spacing: 6,
+                  children: [
+                    Flexible(
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          SizedBox(
+                            height: 200,
+                            child: selectTimeScroll(24, 1, hourController),
+                          ),
+                          Container(
+                            height: 60,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              color: Colors.black38,
+                              borderRadius: BorderRadius.circular(24.0),
+                            ),
+                          ),
+                        ],
                       ),
-                      Container(
-                        height: 60,
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: Colors.black38,
-                          borderRadius: BorderRadius.circular(24.0),
-                        ),
+                    ),
+                    Flexible(
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          SizedBox(
+                            height: 200,
+                            child: selectTimeScroll(60, 0, minuteController),
+                          ),
+                          Container(
+                            height: 60,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              color: Colors.black38,
+                              borderRadius: BorderRadius.circular(24.0),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                Flexible(
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      SizedBox(
-                        height: 200,
-                        child: selectTimeScroll(60, 0, minuteController),
-                      ),
-                      Container(
-                        height: 60,
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: Colors.black38,
-                          borderRadius: BorderRadius.circular(24.0),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                selectAlarmSong(),
               ],
             ),
           ),
@@ -198,6 +206,38 @@ class _HomePageState extends State<HomePage> with HomeMixin {
           );
         },
         childCount: generate,
+      ),
+    );
+  }
+
+  Widget selectAlarmSong() {
+    return GestureDetector(
+      onTap:
+          () => showDialog(
+            context: context,
+            builder:
+                (context) => Dialog.fullscreen(
+                  child: Center(
+                    child: IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: Icon(Icons.close),
+                    ),
+                  ),
+                ),
+          ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Toque",
+            style: TextStyle(
+              color: CustomColors.black,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Icon(Icons.arrow_forward_ios_rounded, size: 40),
+        ],
       ),
     );
   }
