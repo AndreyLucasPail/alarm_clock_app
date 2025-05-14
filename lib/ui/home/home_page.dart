@@ -2,6 +2,7 @@ import 'package:alarm_clock_app/manager/alarm_clock_manager.dart';
 import 'package:alarm_clock_app/mixins/home_mixin.dart';
 import 'package:alarm_clock_app/ui/utils/customcolors.dart';
 import 'package:alarm_clock_app/widgets/custom_switch.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +29,6 @@ class _HomePageState extends State<HomePage> with HomeMixin {
       backgroundColor: CustomColors.white,
       appBar: appBar(),
       body: body(),
-      endDrawer: customLeftDrawer(),
       floatingActionButton: floatingButton(scaffoldKey),
     );
   }
@@ -39,7 +39,27 @@ class _HomePageState extends State<HomePage> with HomeMixin {
         return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(children: [alarmRow()]),
+            child: Column(
+              children: [
+                alarmRow(),
+                SizedBox(height: 50),
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed:
+                          () => player.play(AssetSource("wake_up_at_7am.mp3")),
+                      icon: Icon(Icons.play_arrow),
+                      iconSize: 100,
+                    ),
+                    IconButton(
+                      onPressed: () => player.stop(),
+                      icon: Icon(Icons.stop),
+                      iconSize: 100,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -69,9 +89,7 @@ class _HomePageState extends State<HomePage> with HomeMixin {
       height: 70,
       width: 70,
       child: FloatingActionButton(
-        onPressed: () {
-          scaffoldKey.currentState!.openDrawer();
-        },
+        onPressed: () => addNewAlarmTime(),
         backgroundColor: CustomColors.redOrange,
         shape: CircleBorder(),
         child: Icon(Icons.add, color: CustomColors.white, size: 40),
@@ -107,48 +125,57 @@ class _HomePageState extends State<HomePage> with HomeMixin {
     );
   }
 
-  Future selectAlarmTimeDialog() {
+  Future addNewAlarmTime() {
     return showModalBottomSheet(
       context: context,
       builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            spacing: 6,
-            children: [
-              Flexible(
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    selectTimeScroll(24, 1, hourController),
-                    Container(
-                      height: 60,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: Colors.black38,
-                        borderRadius: BorderRadius.circular(24.0),
+        return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.7,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              spacing: 6,
+              children: [
+                Flexible(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      SizedBox(
+                        height: 200,
+                        child: selectTimeScroll(24, 1, hourController),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              Flexible(
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    selectTimeScroll(60, 0, minuteController),
-                    Container(
-                      height: 60,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: Colors.black38,
-                        borderRadius: BorderRadius.circular(24.0),
+                      Container(
+                        height: 60,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: Colors.black38,
+                          borderRadius: BorderRadius.circular(24.0),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                Flexible(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      SizedBox(
+                        height: 200,
+                        child: selectTimeScroll(60, 0, minuteController),
+                      ),
+                      Container(
+                        height: 60,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: Colors.black38,
+                          borderRadius: BorderRadius.circular(24.0),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -173,9 +200,5 @@ class _HomePageState extends State<HomePage> with HomeMixin {
         childCount: generate,
       ),
     );
-  }
-
-  Widget customLeftDrawer() {
-    return Drawer();
   }
 }
