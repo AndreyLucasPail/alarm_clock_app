@@ -31,8 +31,8 @@ class _NewAlarmePageState extends State<NewAlarmePage> with NewAlarmMixin {
         children: [
           Row(
             children: [
-              selectTimeScroll(24, 1, minuteController),
-              Container(height: 200, width: 1, color: CustomColors.black),
+              selectTimeScroll(24, 1, hourController),
+              line(),
               selectTimeScroll(60, 0, minuteController),
             ],
           ),
@@ -78,6 +78,23 @@ class _NewAlarmePageState extends State<NewAlarmePage> with NewAlarmMixin {
             },
             childCount: generate,
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget line() {
+    return Container(
+      height: 200,
+      width: 1,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            CustomColors.gray,
+            CustomColors.rotPurple,
+            CustomColors.rotPurple,
+            CustomColors.gray,
+          ],
         ),
       ),
     );
@@ -143,90 +160,102 @@ class _NewAlarmePageState extends State<NewAlarmePage> with NewAlarmMixin {
     return showDialog(
       context: context,
       builder: (context) {
-        return Dialog(
-          backgroundColor: CustomColors.supernova,
-          insetPadding: EdgeInsets.symmetric(horizontal: 8.0),
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height * 0.5,
-            width: MediaQuery.of(context).size.width,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                spacing: 10,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 85,
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            selectOneTime
-                                ? CustomColors.rotPurple
-                                : CustomColors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24.0),
+        return StatefulBuilder(
+          builder: (context, state) {
+            return Dialog(
+              backgroundColor: CustomColors.supernova,
+              insetPadding: EdgeInsets.symmetric(horizontal: 8.0),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.5,
+                width: MediaQuery.of(context).size.width,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    spacing: 10,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 85,
+                        width: MediaQuery.of(context).size.width,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                selectOneTime
+                                    ? CustomColors.rotPurple
+                                    : CustomColors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24.0),
+                            ),
+                          ),
+                          onPressed: () {
+                            state(() {
+                              selectOneTime = !selectOneTime;
+                            });
+                          },
+                          child: Text(
+                            "Uma Vez",
+                            style: TextStyle(
+                              color:
+                                  selectOneTime
+                                      ? CustomColors.black
+                                      : CustomColors.white,
+                            ),
+                          ),
                         ),
                       ),
-                      onPressed: () {
-                        setState(() {
-                          selectOneTime = !selectOneTime;
-                        });
-                      },
-                      child: Text(
-                        "Uma Vez",
-                        style: TextStyle(
-                          color:
-                              selectOneTime
-                                  ? CustomColors.black
-                                  : CustomColors.white,
+                      SizedBox(
+                        height: 85,
+                        width: MediaQuery.of(context).size.width,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                selectOneTime
+                                    ? CustomColors.rotPurple
+                                    : CustomColors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24.0),
+                            ),
+                          ),
+                          onPressed: () {
+                            state(() {
+                              selectOneTime = !selectOneTime;
+                            });
+                          },
+                          child: Text("Diariamente"),
                         ),
                       ),
-                    ),
+                      SizedBox(
+                        height: 85,
+                        width: MediaQuery.of(context).size.width,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24.0),
+                            ),
+                          ),
+                          onPressed: () => Navigator.pop(context),
+                          child: Text("Segunda a Sexta"),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 85,
+                        width: MediaQuery.of(context).size.width,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24.0),
+                            ),
+                          ),
+                          onPressed: () => Navigator.pop(context),
+                          child: Text("Personalizado"),
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    height: 85,
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24.0),
-                        ),
-                      ),
-                      onPressed: () => Navigator.pop(context),
-                      child: Text("Diariamente"),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 85,
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24.0),
-                        ),
-                      ),
-                      onPressed: () => Navigator.pop(context),
-                      child: Text("Segunda a Sexta"),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 85,
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24.0),
-                        ),
-                      ),
-                      onPressed: () => Navigator.pop(context),
-                      child: Text("Personalizado"),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );

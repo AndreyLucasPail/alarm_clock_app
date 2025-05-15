@@ -7,4 +7,5 @@ class CustomColors {
   static const Color redOrange = Color(0xFFFF2525);
   static const Color lavender = Color(0xFFE7EEFB);
   static const Color supernova = Color(0xFFFFC03D);
+  static const Color gray = Colors.grey;
 }
