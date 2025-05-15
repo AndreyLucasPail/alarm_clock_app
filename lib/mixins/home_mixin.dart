@@ -6,8 +6,6 @@ mixin HomeMixin {
 
   final player = AudioPlayer();
 
-  bool isPlaying = false;
-
   late int initialHour;
   late int initialMinute;
 

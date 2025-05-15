@@ -4,6 +4,11 @@ mixin NewAlarmMixin {
   late int initialHour;
   late int initialMinute;
 
+  bool selectOneTime = true;
+  bool selectDaily = false;
+  bool selectMondeyFriday = false;
+  bool selectCustom = false;
+
   late FixedExtentScrollController hourController;
   late FixedExtentScrollController minuteController;
 

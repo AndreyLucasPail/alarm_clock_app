@@ -37,6 +37,7 @@ class _NewAlarmePageState extends State<NewAlarmePage> with NewAlarmMixin {
             ],
           ),
           selectAlarmSong(),
+          repeat(),
         ],
       ),
     );
@@ -108,9 +109,126 @@ class _NewAlarmePageState extends State<NewAlarmePage> with NewAlarmMixin {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Icon(Icons.arrow_forward_ios_rounded, size: 40),
+          Icon(Icons.arrow_forward_ios_rounded, size: 30),
         ],
       ),
+    );
+  }
+
+  Widget repeat() {
+    return GestureDetector(
+      onTap: () => repeatDialog(),
+      child: Row(
+        children: [
+          Text(
+            "Repetir",
+            style: TextStyle(
+              color: CustomColors.black,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Spacer(),
+          Text(
+            "Uma vez",
+            style: TextStyle(color: CustomColors.black, fontSize: 16),
+          ),
+          Icon(Icons.arrow_forward_ios_rounded, size: 30),
+        ],
+      ),
+    );
+  }
+
+  Future repeatDialog() {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: CustomColors.supernova,
+          insetPadding: EdgeInsets.symmetric(horizontal: 8.0),
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.5,
+            width: MediaQuery.of(context).size.width,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                spacing: 10,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 85,
+                    width: MediaQuery.of(context).size.width,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            selectOneTime
+                                ? CustomColors.rotPurple
+                                : CustomColors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24.0),
+                        ),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          selectOneTime = !selectOneTime;
+                        });
+                      },
+                      child: Text(
+                        "Uma Vez",
+                        style: TextStyle(
+                          color:
+                              selectOneTime
+                                  ? CustomColors.black
+                                  : CustomColors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 85,
+                    width: MediaQuery.of(context).size.width,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24.0),
+                        ),
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                      child: Text("Diariamente"),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 85,
+                    width: MediaQuery.of(context).size.width,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24.0),
+                        ),
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                      child: Text("Segunda a Sexta"),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 85,
+                    width: MediaQuery.of(context).size.width,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24.0),
+                        ),
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                      child: Text("Personalizado"),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
