@@ -1,8 +1,16 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 mixin NewAlarmMixin {
   late int initialHour;
   late int initialMinute;
+
+  int selectHourIndex = 0;
+  int selectMinIndex = 0;
+
+  String? currentPlaying;
+
+  final player = AudioPlayer();
 
   bool selectOneTime = true;
   bool selectDaily = false;

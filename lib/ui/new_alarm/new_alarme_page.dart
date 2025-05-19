@@ -1,5 +1,6 @@
 import 'package:alarm_clock_app/mixins/new_alarm_mixin.dart';
 import 'package:alarm_clock_app/ui/utils/customcolors.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 class NewAlarmePage extends StatefulWidget {
@@ -63,17 +64,35 @@ class _NewAlarmePageState extends State<NewAlarmePage> with NewAlarmMixin {
     int num,
     FixedExtentScrollController controller,
   ) {
+    final isHour = controller == hourController;
+
     return Flexible(
       child: SizedBox(
         height: 250,
         child: ListWheelScrollView.useDelegate(
           controller: controller,
           itemExtent: 80,
+          onSelectedItemChanged: (value) {
+            setState(() {
+              if (isHour) {
+                selectHourIndex = value;
+              } else {
+                selectMinIndex = value;
+              }
+            });
+          },
           childDelegate: ListWheelChildBuilderDelegate(
             builder: (context, index) {
+              bool isSelect =
+                  isHour ? index == selectHourIndex : index == selectMinIndex;
+
               return Text(
                 "${index + num}",
-                style: TextStyle(color: CustomColors.black, fontSize: 30),
+                style: TextStyle(
+                  color: isSelect ? CustomColors.redOrange : CustomColors.black,
+                  fontSize: 30,
+                  fontWeight: isSelect ? FontWeight.bold : FontWeight.normal,
+                ),
               );
             },
             childCount: generate,
@@ -106,13 +125,28 @@ class _NewAlarmePageState extends State<NewAlarmePage> with NewAlarmMixin {
           () => showDialog(
             context: context,
             builder:
-                (context) => Dialog.fullscreen(
-                  child: Center(
-                    child: IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: Icon(Icons.close),
-                    ),
-                  ),
+                (context) => StatefulBuilder(
+                  builder: (context, state) {
+                    return Dialog.fullscreen(
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  player.stop();
+                                  Navigator.pop(context);
+                                },
+                                icon: Icon(Icons.close),
+                              ),
+                              alarmSongDialog(state),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
           ),
       child: Row(
@@ -128,6 +162,47 @@ class _NewAlarmePageState extends State<NewAlarmePage> with NewAlarmMixin {
           ),
           Icon(Icons.arrow_forward_ios_rounded, size: 30),
         ],
+      ),
+    );
+  }
+
+  Widget alarmSongDialog(Function state) {
+    return Wrap(
+      spacing: 10,
+      runSpacing: 10,
+      children: [
+        songContainer(CustomColors.redOrange, "alarmtypebeatf.mp3", state),
+        songContainer(CustomColors.rotPurple, "plantasia_alarm.mp3", state),
+        songContainer(CustomColors.supernova, "wake_up_at_7am.mp3", state),
+        songContainer(CustomColors.black, "wake_up_now.mp3", state),
+      ],
+    );
+  }
+
+  Widget songContainer(Color color, String path, Function state) {
+    return InkWell(
+      onTap: () async {
+        if (currentPlaying == path) {
+          await player.stop();
+          state(() {
+            currentPlaying = null;
+          });
+        } else {
+          await player.stop();
+          await Future.delayed(Duration(milliseconds: 100));
+          await player.play(AssetSource(path), volume: 100);
+          state(() {
+            currentPlaying = path;
+          });
+        }
+      },
+      child: Container(
+        height: 250,
+        width: 180,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(24.0),
+        ),
       ),
     );
   }
