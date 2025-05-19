@@ -1,7 +1,9 @@
+import 'package:alarm_clock_app/manager/alarm_clock_manager.dart';
 import 'package:alarm_clock_app/mixins/new_alarm_mixin.dart';
 import 'package:alarm_clock_app/ui/utils/customcolors.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class NewAlarmePage extends StatefulWidget {
   const NewAlarmePage({super.key});
@@ -235,8 +237,8 @@ class _NewAlarmePageState extends State<NewAlarmePage> with NewAlarmMixin {
     return showDialog(
       context: context,
       builder: (context) {
-        return StatefulBuilder(
-          builder: (context, state) {
+        return Consumer<AlarmClockManager>(
+          builder: (_, maneger, __) {
             return Dialog(
               backgroundColor: CustomColors.supernova,
               insetPadding: EdgeInsets.symmetric(horizontal: 8.0),
@@ -249,81 +251,21 @@ class _NewAlarmePageState extends State<NewAlarmePage> with NewAlarmMixin {
                     spacing: 10,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        height: 85,
-                        width: MediaQuery.of(context).size.width,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                selectOneTime
-                                    ? CustomColors.rotPurple
-                                    : CustomColors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(24.0),
-                            ),
-                          ),
-                          onPressed: () {
-                            state(() {
-                              selectOneTime = !selectOneTime;
-                            });
-                          },
-                          child: Text(
-                            "Uma Vez",
-                            style: TextStyle(
-                              color:
-                                  selectOneTime
-                                      ? CustomColors.black
-                                      : CustomColors.white,
-                            ),
-                          ),
-                        ),
+                      buildRepeatButton("Uma vez", maneger, RepeatOption.once),
+                      buildRepeatButton(
+                        "Diariamente",
+                        maneger,
+                        RepeatOption.daily,
                       ),
-                      SizedBox(
-                        height: 85,
-                        width: MediaQuery.of(context).size.width,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                selectOneTime
-                                    ? CustomColors.rotPurple
-                                    : CustomColors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(24.0),
-                            ),
-                          ),
-                          onPressed: () {
-                            state(() {
-                              selectOneTime = !selectOneTime;
-                            });
-                          },
-                          child: Text("Diariamente"),
-                        ),
+                      buildRepeatButton(
+                        "Seg. a Sex.",
+                        maneger,
+                        RepeatOption.weekDay,
                       ),
-                      SizedBox(
-                        height: 85,
-                        width: MediaQuery.of(context).size.width,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(24.0),
-                            ),
-                          ),
-                          onPressed: () => Navigator.pop(context),
-                          child: Text("Segunda a Sexta"),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 85,
-                        width: MediaQuery.of(context).size.width,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(24.0),
-                            ),
-                          ),
-                          onPressed: () => Navigator.pop(context),
-                          child: Text("Personalizado"),
-                        ),
+                      buildRepeatButton(
+                        "Personalizado",
+                        maneger,
+                        RepeatOption.custom,
                       ),
                     ],
                   ),
@@ -333,6 +275,51 @@ class _NewAlarmePageState extends State<NewAlarmePage> with NewAlarmMixin {
           },
         );
       },
+    );
+  }
+
+  Widget buildRepeatButton(
+    String text,
+    AlarmClockManager manager,
+    RepeatOption option,
+  ) {
+    final bool isSelect = manager.selectedOption == option;
+
+    return SizedBox(
+      height: 85,
+      width: double.infinity,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor:
+              isSelect ? CustomColors.redOrange : CustomColors.lavender,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24.0),
+          ),
+        ),
+        onPressed: () {
+          manager.alarmRepeationOption(option);
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          spacing: 20,
+          children: [
+            isSelect
+                ? Icon(
+                  Icons.check,
+                  color: isSelect ? CustomColors.white : CustomColors.black,
+                  size: 24,
+                )
+                : Container(),
+            Text(
+              text,
+              style: TextStyle(
+                color: isSelect ? CustomColors.white : CustomColors.black,
+                fontSize: 16,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

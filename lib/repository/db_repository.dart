@@ -10,6 +10,7 @@ String titleColumn = "titleColumn";
 String repeatColumn = "repeatColumn";
 String vibrateColumn = "vibrateColumn";
 String activateColumn = "activateColumn";
+String songColumn = "songColumn";
 
 class DataBaseRepository {
   DataBaseRepository.internal();
@@ -39,7 +40,7 @@ class DataBaseRepository {
         db.execute(
           'CREATE TABLE $alarmClockTable ($id INTEGER PRIMARY KEY AUTOINCREMENT, $hourColumn INTEGER,'
           ' $minuteColumn INTEGER, $titleColumn STRING, $repeatColumn INTEGER, $vibrateColumn BOOL,'
-          ' $activateColumn BOOL)',
+          ' $activateColumn BOOL, $songColumn STRING)',
         );
       },
     );

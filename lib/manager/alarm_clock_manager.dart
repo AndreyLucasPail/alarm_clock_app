@@ -4,9 +4,14 @@ import 'package:alarm_clock_app/model/alarm_clock_model.dart';
 import 'package:alarm_clock_app/repository/db_repository.dart';
 import 'package:flutter/material.dart';
 
+enum RepeatOption { once, daily, weekDay, custom }
+
 class AlarmClockManager extends ChangeNotifier {
   List<AlarmClockModel> alarmsList = [];
   final DataBaseRepository dataBaseRepository = DataBaseRepository();
+  RepeatOption _selectedOption = RepeatOption.once;
+
+  RepeatOption get selectedOption => _selectedOption;
 
   Future<void> getAlarms() async {
     try {
@@ -43,5 +48,10 @@ class AlarmClockManager extends ChangeNotifier {
     } catch (e) {
       print("Não foi possivel editar alarme :$e manager");
     }
+  }
+
+  void alarmRepeationOption(RepeatOption option) {
+    _selectedOption = option;
+    notifyListeners();
   }
 }
