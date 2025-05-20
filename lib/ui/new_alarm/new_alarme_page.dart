@@ -64,6 +64,8 @@ class _NewAlarmePageState extends State<NewAlarmePage>
           ),
           selectAlarmSong(),
           repeat(),
+          Spacer(),
+          saveNewAlarmButtons(),
         ],
       ),
     );
@@ -238,6 +240,7 @@ class _NewAlarmePageState extends State<NewAlarmePage>
       child: Container(
         height: 250,
         width: 180,
+        padding: EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(24.0),
@@ -364,6 +367,26 @@ class _NewAlarmePageState extends State<NewAlarmePage>
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget saveNewAlarmButtons() {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: SizedBox(
+        height: 55,
+        width: 150,
+        child: ElevatedButton(
+          onPressed: () {},
+          style: ElevatedButton.styleFrom(
+            backgroundColor: CustomColors.supernova,
+          ),
+          child: Text(
+            "Salvar",
+            style: TextStyle(color: CustomColors.black, fontSize: 20),
+          ),
         ),
       ),
     );
