@@ -5,6 +5,8 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'dart:math' as math;
+
 class NewAlarmePage extends StatefulWidget {
   const NewAlarmePage({super.key});
 
@@ -14,11 +16,32 @@ class NewAlarmePage extends StatefulWidget {
   State<NewAlarmePage> createState() => _NewAlarmePageState();
 }
 
-class _NewAlarmePageState extends State<NewAlarmePage> with NewAlarmMixin {
+class _NewAlarmePageState extends State<NewAlarmePage>
+    with NewAlarmMixin, TickerProviderStateMixin {
+  // late final AnimationController controller = AnimationController(
+  //   vsync: this,
+  //   duration: Duration(seconds: 2),
+  // )..repeat();
+
   @override
   void initState() {
     super.initState();
     initMixin();
+
+    for (var path in audioPaths) {
+      controllers[path] = AnimationController(
+        vsync: this,
+        duration: Duration(seconds: 5),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    for (var controller in controllers.values) {
+      controller.dispose();
+    }
+    super.dispose();
   }
 
   @override
@@ -182,19 +205,33 @@ class _NewAlarmePageState extends State<NewAlarmePage> with NewAlarmMixin {
   }
 
   Widget songContainer(Color color, String path, Function state) {
+    final controller = controllers[path]!;
+
     return InkWell(
       onTap: () async {
         if (currentPlaying == path) {
           await player.stop();
+          controller.stop();
+          controller.reset();
+
           state(() {
             currentPlaying = null;
           });
         } else {
           await player.stop();
+          if (currentPlaying != null &&
+              controllers.containsKey(currentPlaying)) {
+            controllers[currentPlaying!]?.stop();
+          }
+          controllers[path] ??= AnimationController(
+            vsync: this,
+            duration: const Duration(seconds: 4),
+          )..repeat();
           await Future.delayed(Duration(milliseconds: 100));
           await player.play(AssetSource(path), volume: 100);
           state(() {
             currentPlaying = path;
+            controllers[path]?.repeat();
           });
         }
       },
@@ -204,6 +241,15 @@ class _NewAlarmePageState extends State<NewAlarmePage> with NewAlarmMixin {
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(24.0),
+        ),
+        child: AnimatedBuilder(
+          animation: controllers[path]!,
+          builder: (context, child) {
+            return Transform.rotate(
+              angle: (controllers[path]?.value ?? 0) * 2 * math.pi,
+              child: Image.asset("assets/disco-de-vinil.png"),
+            );
+          },
         ),
       ),
     );
