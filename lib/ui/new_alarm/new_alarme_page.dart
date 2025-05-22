@@ -1,7 +1,7 @@
 import 'package:alarm_clock_app/manager/alarm_clock_manager.dart';
+import 'package:alarm_clock_app/manager/song_player_manager.dart';
 import 'package:alarm_clock_app/mixins/new_alarm_mixin.dart';
 import 'package:alarm_clock_app/ui/utils/customcolors.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,30 +18,17 @@ class NewAlarmePage extends StatefulWidget {
 
 class _NewAlarmePageState extends State<NewAlarmePage>
     with NewAlarmMixin, TickerProviderStateMixin {
-  // late final AnimationController controller = AnimationController(
-  //   vsync: this,
-  //   duration: Duration(seconds: 2),
-  // )..repeat();
-
   @override
   void initState() {
     super.initState();
     initMixin();
 
-    for (var path in audioPaths) {
-      controllers[path] = AnimationController(
-        vsync: this,
-        duration: Duration(seconds: 5),
-      );
-    }
-  }
-
-  @override
-  void dispose() {
-    for (var controller in controllers.values) {
-      controller.dispose();
-    }
-    super.dispose();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<SongPlayerManager>(
+        context,
+        listen: false,
+      ).initController(this);
+    });
   }
 
   @override
@@ -50,24 +37,28 @@ class _NewAlarmePageState extends State<NewAlarmePage>
   }
 
   Widget body() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        spacing: 20,
-        children: [
-          Row(
+    return Consumer2<AlarmClockManager, SongPlayerManager>(
+      builder: (_, alarmManager, songManager, __) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            spacing: 20,
             children: [
-              selectTimeScroll(24, 1, hourController),
-              line(),
-              selectTimeScroll(60, 0, minuteController),
+              Row(
+                children: [
+                  selectTimeScroll(24, 1, hourController),
+                  line(),
+                  selectTimeScroll(60, 0, minuteController),
+                ],
+              ),
+              selectAlarmSong(songManager),
+              repeat(alarmManager),
+              Spacer(),
+              saveNewAlarmButtons(),
             ],
           ),
-          selectAlarmSong(),
-          repeat(),
-          Spacer(),
-          saveNewAlarmButtons(),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -146,34 +137,30 @@ class _NewAlarmePageState extends State<NewAlarmePage>
     );
   }
 
-  Widget selectAlarmSong() {
+  Widget selectAlarmSong(SongPlayerManager songManager) {
     return GestureDetector(
       onTap:
           () => showDialog(
             context: context,
             builder:
-                (context) => StatefulBuilder(
-                  builder: (context, state) {
-                    return Dialog.fullscreen(
-                      child: SingleChildScrollView(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  player.stop();
-                                  Navigator.pop(context);
-                                },
-                                icon: Icon(Icons.close),
-                              ),
-                              alarmSongDialog(state),
-                            ],
+                (context) => Dialog.fullscreen(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              songManager.stop();
+                              Navigator.pop(context);
+                            },
+                            icon: Icon(Icons.close),
                           ),
-                        ),
+                          alarmSongDialog(songManager),
+                        ],
                       ),
-                    );
-                  },
+                    ),
+                  ),
                 ),
           ),
       child: Row(
@@ -193,50 +180,41 @@ class _NewAlarmePageState extends State<NewAlarmePage>
     );
   }
 
-  Widget alarmSongDialog(Function state) {
+  Widget alarmSongDialog(SongPlayerManager songManager) {
     return Wrap(
       spacing: 10,
       runSpacing: 10,
       children: [
-        songContainer(CustomColors.redOrange, "alarmtypebeatf.mp3", state),
-        songContainer(CustomColors.rotPurple, "plantasia_alarm.mp3", state),
-        songContainer(CustomColors.supernova, "wake_up_at_7am.mp3", state),
-        songContainer(CustomColors.black, "wake_up_now.mp3", state),
+        songContainer(
+          CustomColors.redOrange,
+          "alarmtypebeatf.mp3",
+          songManager,
+        ),
+        songContainer(
+          CustomColors.rotPurple,
+          "plantasia_alarm.mp3",
+          songManager,
+        ),
+        songContainer(
+          CustomColors.supernova,
+          "wake_up_at_7am.mp3",
+          songManager,
+        ),
+        songContainer(CustomColors.black, "wake_up_now.mp3", songManager),
       ],
     );
   }
 
-  Widget songContainer(Color color, String path, Function state) {
-    final controller = controllers[path]!;
+  Widget songContainer(
+    Color color,
+    String path,
+    SongPlayerManager songManager,
+  ) {
+    final controller = songManager.controller;
+    final bool isPlayng = songManager.currentSong == path;
 
     return InkWell(
-      onTap: () async {
-        if (currentPlaying == path) {
-          await player.stop();
-          controller.stop();
-          controller.reset();
-
-          state(() {
-            currentPlaying = null;
-          });
-        } else {
-          await player.stop();
-          if (currentPlaying != null &&
-              controllers.containsKey(currentPlaying)) {
-            controllers[currentPlaying!]?.stop();
-          }
-          controllers[path] ??= AnimationController(
-            vsync: this,
-            duration: const Duration(seconds: 4),
-          )..repeat();
-          await Future.delayed(Duration(milliseconds: 100));
-          await player.play(AssetSource(path), volume: 100);
-          state(() {
-            currentPlaying = path;
-            controllers[path]?.repeat();
-          });
-        }
-      },
+      onTap: () => songManager.toggleSong(path),
       child: Container(
         height: 250,
         width: 180,
@@ -245,22 +223,27 @@ class _NewAlarmePageState extends State<NewAlarmePage>
           color: color,
           borderRadius: BorderRadius.circular(24.0),
         ),
-        child: AnimatedBuilder(
-          animation: controllers[path]!,
-          builder: (context, child) {
-            return Transform.rotate(
-              angle: (controllers[path]?.value ?? 0) * 2 * math.pi,
-              child: Image.asset("assets/disco-de-vinil.png"),
-            );
-          },
-        ),
+        child:
+            isPlayng && controller != null
+                ? AnimatedBuilder(
+                  animation: controller,
+                  builder: (context, child) {
+                    print("Rebuild: ${controller.value}>>>>>>>>>>>>>>>>>>>>>>");
+                    print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< $isPlayng");
+                    return Transform.rotate(
+                      angle: controller.value * 2 * math.pi,
+                      child: Image.asset("assets/disco-de-vinil.png"),
+                    );
+                  },
+                )
+                : Image.asset("assets/disco-de-vinil.png"),
       ),
     );
   }
 
-  Widget repeat() {
+  Widget repeat(AlarmClockManager alarmManager) {
     return GestureDetector(
-      onTap: () => repeatDialog(),
+      onTap: () => repeatDialog(alarmManager),
       child: Row(
         children: [
           Text(
@@ -282,46 +265,42 @@ class _NewAlarmePageState extends State<NewAlarmePage>
     );
   }
 
-  Future repeatDialog() {
+  Future repeatDialog(AlarmClockManager alarmManager) {
     return showDialog(
       context: context,
       builder: (context) {
-        return Consumer<AlarmClockManager>(
-          builder: (_, maneger, __) {
-            return Dialog(
-              backgroundColor: CustomColors.supernova,
-              insetPadding: EdgeInsets.symmetric(horizontal: 8.0),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.5,
-                width: MediaQuery.of(context).size.width,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    spacing: 10,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      buildRepeatButton("Uma vez", maneger, RepeatOption.once),
-                      buildRepeatButton(
-                        "Diariamente",
-                        maneger,
-                        RepeatOption.daily,
-                      ),
-                      buildRepeatButton(
-                        "Seg. a Sex.",
-                        maneger,
-                        RepeatOption.weekDay,
-                      ),
-                      buildRepeatButton(
-                        "Personalizado",
-                        maneger,
-                        RepeatOption.custom,
-                      ),
-                    ],
+        return Dialog(
+          backgroundColor: CustomColors.supernova,
+          insetPadding: EdgeInsets.symmetric(horizontal: 8.0),
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.5,
+            width: MediaQuery.of(context).size.width,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                spacing: 10,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  buildRepeatButton("Uma vez", alarmManager, RepeatOption.once),
+                  buildRepeatButton(
+                    "Diariamente",
+                    alarmManager,
+                    RepeatOption.daily,
                   ),
-                ),
+                  buildRepeatButton(
+                    "Seg. a Sex.",
+                    alarmManager,
+                    RepeatOption.weekDay,
+                  ),
+                  buildRepeatButton(
+                    "Personalizado",
+                    alarmManager,
+                    RepeatOption.custom,
+                  ),
+                ],
               ),
-            );
-          },
+            ),
+          ),
         );
       },
     );

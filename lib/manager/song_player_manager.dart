@@ -21,6 +21,7 @@ class SongPlayerManager extends ChangeNotifier {
       await audioPlayer.stop();
       _currentSong = null;
       _controller!.stop();
+      _controller!.reset();
     } else {
       await audioPlayer.stop();
       await audioPlayer.play(AssetSource(path));
@@ -33,5 +34,6 @@ class SongPlayerManager extends ChangeNotifier {
     await audioPlayer.stop();
     _controller!.stop();
     _currentSong = null;
+    notifyListeners();
   }
 }
