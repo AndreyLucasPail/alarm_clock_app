@@ -16,5 +16,22 @@ class SongPlayerManager extends ChangeNotifier {
     );
   }
 
-  Future<void> toggleSong() {}
+  Future<void> toggleSong(String path) async {
+    if (_currentSong == path) {
+      await audioPlayer.stop();
+      _currentSong = null;
+      _controller!.stop();
+    } else {
+      await audioPlayer.stop();
+      await audioPlayer.play(AssetSource(path));
+      _controller!.repeat();
+    }
+    notifyListeners();
+  }
+
+  Future<void> stop() async {
+    await audioPlayer.stop();
+    _controller!.stop();
+    _currentSong = null;
+  }
 }
