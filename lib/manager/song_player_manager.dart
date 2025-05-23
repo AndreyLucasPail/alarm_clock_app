@@ -4,36 +4,37 @@ import 'package:flutter/material.dart';
 class SongPlayerManager extends ChangeNotifier {
   final AudioPlayer audioPlayer = AudioPlayer();
   String? _currentSong;
-  AnimationController? _controller;
+  bool _isPlaying = false;
 
   String? get currentSong => _currentSong;
-  AnimationController? get controller => _controller;
-
-  void initController(TickerProvider vsync) {
-    _controller = AnimationController(
-      vsync: vsync,
-      duration: Duration(seconds: 2),
-    );
-  }
+  bool? get isPlaying => _isPlaying;
 
   Future<void> toggleSong(String path) async {
     if (_currentSong == path) {
       await audioPlayer.stop();
       _currentSong = null;
-      _controller!.stop();
-      _controller!.reset();
     } else {
       await audioPlayer.stop();
       await audioPlayer.play(AssetSource(path));
-      _controller!.repeat();
+      _currentSong = path;
     }
     notifyListeners();
   }
 
   Future<void> stop() async {
     await audioPlayer.stop();
-    _controller!.stop();
+
     _currentSong = null;
+    notifyListeners();
+  }
+
+  void start(String path) {
+    if (_currentSong == path) {
+      _isPlaying = !_isPlaying;
+    } else {
+      _isPlaying = false;
+    }
+    ;
     notifyListeners();
   }
 }

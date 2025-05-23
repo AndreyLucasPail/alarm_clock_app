@@ -15,6 +15,11 @@ mixin NewAlarmMixin {
   late FixedExtentScrollController hourController;
   late FixedExtentScrollController minuteController;
 
+  AnimationController? controller1;
+  AnimationController? controller2;
+  AnimationController? controller3;
+  AnimationController? controller4;
+
   void initMixin() {
     initialHour = DateTime.now().hour;
     initialMinute = DateTime.now().minute;

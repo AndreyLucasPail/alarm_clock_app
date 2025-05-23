@@ -2,10 +2,9 @@ import 'package:alarm_clock_app/manager/alarm_clock_manager.dart';
 import 'package:alarm_clock_app/manager/song_player_manager.dart';
 import 'package:alarm_clock_app/mixins/new_alarm_mixin.dart';
 import 'package:alarm_clock_app/ui/utils/customcolors.dart';
+import 'package:alarm_clock_app/widgets/song_container.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'dart:math' as math;
 
 class NewAlarmePage extends StatefulWidget {
   const NewAlarmePage({super.key});
@@ -22,13 +21,6 @@ class _NewAlarmePageState extends State<NewAlarmePage>
   void initState() {
     super.initState();
     initMixin();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<SongPlayerManager>(
-        context,
-        listen: false,
-      ).initController(this);
-    });
   }
 
   @override
@@ -37,8 +29,8 @@ class _NewAlarmePageState extends State<NewAlarmePage>
   }
 
   Widget body() {
-    return Consumer2<AlarmClockManager, SongPlayerManager>(
-      builder: (_, alarmManager, songManager, __) {
+    return Consumer<AlarmClockManager>(
+      builder: (_, alarmManager, __) {
         return Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -51,7 +43,7 @@ class _NewAlarmePageState extends State<NewAlarmePage>
                   selectTimeScroll(60, 0, minuteController),
                 ],
               ),
-              selectAlarmSong(songManager),
+              selectAlarmSong(),
               repeat(alarmManager),
               Spacer(),
               saveNewAlarmButtons(),
@@ -137,7 +129,7 @@ class _NewAlarmePageState extends State<NewAlarmePage>
     );
   }
 
-  Widget selectAlarmSong(SongPlayerManager songManager) {
+  Widget selectAlarmSong() {
     return GestureDetector(
       onTap:
           () => showDialog(
@@ -151,12 +143,15 @@ class _NewAlarmePageState extends State<NewAlarmePage>
                         children: [
                           IconButton(
                             onPressed: () {
-                              songManager.stop();
+                              Provider.of<SongPlayerManager>(
+                                context,
+                                listen: false,
+                              ).stop();
                               Navigator.pop(context);
                             },
                             icon: Icon(Icons.close),
                           ),
-                          alarmSongDialog(songManager),
+                          alarmSongDialog(),
                         ],
                       ),
                     ),
@@ -180,64 +175,25 @@ class _NewAlarmePageState extends State<NewAlarmePage>
     );
   }
 
-  Widget alarmSongDialog(SongPlayerManager songManager) {
+  Widget alarmSongDialog() {
     return Wrap(
       spacing: 10,
       runSpacing: 10,
       children: [
-        songContainer(
-          CustomColors.redOrange,
-          "alarmtypebeatf.mp3",
-          songManager,
+        SongContainer(
+          color: CustomColors.redOrange,
+          path: "alarmtypebeatf.mp3",
         ),
-        songContainer(
-          CustomColors.rotPurple,
-          "plantasia_alarm.mp3",
-          songManager,
+        SongContainer(
+          color: CustomColors.rotPurple,
+          path: "plantasia_alarm.mp3",
         ),
-        songContainer(
-          CustomColors.supernova,
-          "wake_up_at_7am.mp3",
-          songManager,
+        SongContainer(
+          color: CustomColors.supernova,
+          path: "wake_up_at_7am.mp3",
         ),
-        songContainer(CustomColors.black, "wake_up_now.mp3", songManager),
+        SongContainer(color: CustomColors.black, path: "wake_up_now.mp3"),
       ],
-    );
-  }
-
-  Widget songContainer(
-    Color color,
-    String path,
-    SongPlayerManager songManager,
-  ) {
-    final controller = songManager.controller;
-    final bool isPlayng = songManager.currentSong == path;
-
-    return InkWell(
-      onTap: () => songManager.toggleSong(path),
-      child: Container(
-        height: 250,
-        width: 180,
-        padding: EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(24.0),
-        ),
-        child:
-            isPlayng && controller != null
-                ? AnimatedBuilder(
-                  animation: controller,
-                  builder: (context, child) {
-                    print("Rebuild: ${controller.value}>>>>>>>>>>>>>>>>>>>>>>");
-                    print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< $isPlayng");
-                    return Transform.rotate(
-                      angle: controller.value * 2 * math.pi,
-                      child: Image.asset("assets/disco-de-vinil.png"),
-                    );
-                  },
-                )
-                : Image.asset("assets/disco-de-vinil.png"),
-      ),
     );
   }
 
