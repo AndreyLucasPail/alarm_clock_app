@@ -48,11 +48,11 @@ class _SongContainerState extends State<SongContainer>
   Widget build(BuildContext context) {
     return Consumer<SongPlayerManager>(
       builder: (_, songManeger, __) {
+        final isCurrentSong = songManeger.currentSong == widget.path;
+        handleAnimation(isCurrentSong);
         return InkWell(
-          onTap: () {
-            songManeger.toggleSong(widget.path!);
-            songManeger.start(widget.path!);
-            handleAnimation(songManeger.isPlaying!);
+          onTap: () async {
+            await songManeger.toggleSong(widget.path!);
           },
           child: Container(
             height: 250,

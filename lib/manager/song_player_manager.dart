@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 class SongPlayerManager extends ChangeNotifier {
   final AudioPlayer audioPlayer = AudioPlayer();
   String? _currentSong;
-  bool _isPlaying = false;
 
   String? get currentSong => _currentSong;
-  bool? get isPlaying => _isPlaying;
 
   Future<void> toggleSong(String path) async {
     if (_currentSong == path) {
@@ -25,16 +23,6 @@ class SongPlayerManager extends ChangeNotifier {
     await audioPlayer.stop();
 
     _currentSong = null;
-    notifyListeners();
-  }
-
-  void start(String path) {
-    if (_currentSong == path) {
-      _isPlaying = !_isPlaying;
-    } else {
-      _isPlaying = false;
-    }
-    ;
     notifyListeners();
   }
 }
