@@ -29,28 +29,24 @@ class _NewAlarmePageState extends State<NewAlarmePage>
   }
 
   Widget body() {
-    return Consumer<AlarmClockManager>(
-      builder: (_, alarmManager, __) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            spacing: 20,
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        spacing: 20,
+        children: [
+          Row(
             children: [
-              Row(
-                children: [
-                  selectTimeScroll(24, 1, hourController),
-                  line(),
-                  selectTimeScroll(60, 0, minuteController),
-                ],
-              ),
-              selectAlarmSong(),
-              repeat(alarmManager),
-              Spacer(),
-              saveNewAlarmButtons(),
+              selectTimeScroll(24, 1, hourController),
+              line(),
+              selectTimeScroll(60, 0, minuteController),
             ],
           ),
-        );
-      },
+          selectAlarmSong(),
+          repeat(),
+          Spacer(),
+          saveNewAlarmButtons(),
+        ],
+      ),
     );
   }
 
@@ -197,9 +193,9 @@ class _NewAlarmePageState extends State<NewAlarmePage>
     );
   }
 
-  Widget repeat(AlarmClockManager alarmManager) {
+  Widget repeat() {
     return GestureDetector(
-      onTap: () => repeatDialog(alarmManager),
+      onTap: () => repeatDialog(),
       child: Row(
         children: [
           Text(
@@ -221,42 +217,50 @@ class _NewAlarmePageState extends State<NewAlarmePage>
     );
   }
 
-  Future repeatDialog(AlarmClockManager alarmManager) {
+  Future repeatDialog() {
     return showDialog(
       context: context,
       builder: (context) {
-        return Dialog(
-          backgroundColor: CustomColors.supernova,
-          insetPadding: EdgeInsets.symmetric(horizontal: 8.0),
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height * 0.5,
-            width: MediaQuery.of(context).size.width,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                spacing: 10,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  buildRepeatButton("Uma vez", alarmManager, RepeatOption.once),
-                  buildRepeatButton(
-                    "Diariamente",
-                    alarmManager,
-                    RepeatOption.daily,
+        return Consumer<AlarmClockManager>(
+          builder: (__, alarmManager, _) {
+            return Dialog(
+              backgroundColor: CustomColors.supernova,
+              insetPadding: EdgeInsets.symmetric(horizontal: 8.0),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.5,
+                width: MediaQuery.of(context).size.width,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    spacing: 10,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      buildRepeatButton(
+                        "Uma vez",
+                        alarmManager,
+                        RepeatOption.once,
+                      ),
+                      buildRepeatButton(
+                        "Diariamente",
+                        alarmManager,
+                        RepeatOption.daily,
+                      ),
+                      buildRepeatButton(
+                        "Seg. a Sex.",
+                        alarmManager,
+                        RepeatOption.weekDay,
+                      ),
+                      buildRepeatButton(
+                        "Personalizado",
+                        alarmManager,
+                        RepeatOption.custom,
+                      ),
+                    ],
                   ),
-                  buildRepeatButton(
-                    "Seg. a Sex.",
-                    alarmManager,
-                    RepeatOption.weekDay,
-                  ),
-                  buildRepeatButton(
-                    "Personalizado",
-                    alarmManager,
-                    RepeatOption.custom,
-                  ),
-                ],
+                ),
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );
