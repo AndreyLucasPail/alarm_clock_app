@@ -7,18 +7,8 @@ mixin NewAlarmMixin {
   int selectHourIndex = 0;
   int selectMinIndex = 0;
 
-  bool selectOneTime = true;
-  bool selectDaily = false;
-  bool selectMondeyFriday = false;
-  bool selectCustom = false;
-
   late FixedExtentScrollController hourController;
   late FixedExtentScrollController minuteController;
-
-  AnimationController? controller1;
-  AnimationController? controller2;
-  AnimationController? controller3;
-  AnimationController? controller4;
 
   void initMixin() {
     initialHour = DateTime.now().hour;

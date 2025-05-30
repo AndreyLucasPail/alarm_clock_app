@@ -179,16 +179,23 @@ class _NewAlarmePageState extends State<NewAlarmePage>
         SongContainer(
           color: CustomColors.redOrange,
           path: "alarmtypebeatf.mp3",
+          songSelected: SelectedSong.alarmType,
         ),
         SongContainer(
           color: CustomColors.rotPurple,
           path: "plantasia_alarm.mp3",
+          songSelected: SelectedSong.plantasia,
         ),
         SongContainer(
           color: CustomColors.supernova,
           path: "wake_up_at_7am.mp3",
+          songSelected: SelectedSong.wake7am,
         ),
-        SongContainer(color: CustomColors.black, path: "wake_up_now.mp3"),
+        SongContainer(
+          color: CustomColors.black,
+          path: "wake_up_now.mp3",
+          songSelected: SelectedSong.wakeNow,
+        ),
       ],
     );
   }
