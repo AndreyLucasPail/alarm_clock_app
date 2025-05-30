@@ -1,4 +1,4 @@
-import 'package:alarm_clock_app/ui/utils/customcolors.dart';
+import 'package:alarm_clock_app/utils/customcolors.dart';
 import 'package:flutter/material.dart';
 
 class CustomSwitch extends StatefulWidget {

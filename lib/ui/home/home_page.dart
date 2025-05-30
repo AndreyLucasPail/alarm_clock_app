@@ -1,9 +1,8 @@
 import 'package:alarm_clock_app/manager/alarm_clock_manager.dart';
 import 'package:alarm_clock_app/mixins/home_mixin.dart';
 import 'package:alarm_clock_app/ui/new_alarm/new_alarme_page.dart';
-import 'package:alarm_clock_app/ui/utils/customcolors.dart';
+import 'package:alarm_clock_app/utils/customcolors.dart';
 import 'package:alarm_clock_app/widgets/custom_switch.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -42,27 +41,7 @@ class _HomePageState extends State<HomePage> with HomeMixin {
         return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                alarmRow(),
-                SizedBox(height: 50),
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed:
-                          () => player.play(AssetSource("wake_up_at_7am.mp3")),
-                      icon: Icon(Icons.play_arrow),
-                      iconSize: 100,
-                    ),
-                    IconButton(
-                      onPressed: () => player.stop(),
-                      icon: Icon(Icons.stop),
-                      iconSize: 100,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+            child: Column(children: [alarmRow()]),
           ),
         );
       },

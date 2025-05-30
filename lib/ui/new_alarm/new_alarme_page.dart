@@ -1,7 +1,7 @@
 import 'package:alarm_clock_app/manager/alarm_clock_manager.dart';
 import 'package:alarm_clock_app/manager/song_player_manager.dart';
 import 'package:alarm_clock_app/mixins/new_alarm_mixin.dart';
-import 'package:alarm_clock_app/ui/utils/customcolors.dart';
+import 'package:alarm_clock_app/utils/customcolors.dart';
 import 'package:alarm_clock_app/widgets/song_container.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
