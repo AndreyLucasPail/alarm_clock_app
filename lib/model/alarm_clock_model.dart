@@ -1,12 +1,12 @@
 class AlarmClockModel {
   AlarmClockModel({
     this.id,
-    this.hour,
-    this.minute,
-    this.title,
-    this.vibrate,
-    this.activate,
-    this.song,
+    required this.hour,
+    required this.minute,
+    required this.title,
+    required this.vibrate,
+    required this.activate,
+    required this.song,
   });
 
   int? id;

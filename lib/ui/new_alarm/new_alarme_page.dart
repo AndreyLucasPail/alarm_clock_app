@@ -1,6 +1,7 @@
 import 'package:alarm_clock_app/manager/alarm_clock_manager.dart';
 import 'package:alarm_clock_app/manager/song_player_manager.dart';
 import 'package:alarm_clock_app/mixins/new_alarm_mixin.dart';
+import 'package:alarm_clock_app/model/alarm_clock_model.dart';
 import 'package:alarm_clock_app/utils/customcolors.dart';
 import 'package:alarm_clock_app/widgets/song_container.dart';
 import 'package:flutter/material.dart';
@@ -70,6 +71,7 @@ class _NewAlarmePageState extends State<NewAlarmePage>
     int num,
     FixedExtentScrollController controller,
   ) {
+    final timeManager = Provider.of<AlarmClockManager>(context, listen: true);
     final isHour = controller == hourController;
 
     return Flexible(
@@ -79,18 +81,17 @@ class _NewAlarmePageState extends State<NewAlarmePage>
           controller: controller,
           itemExtent: 80,
           onSelectedItemChanged: (value) {
-            setState(() {
-              if (isHour) {
-                selectHourIndex = value;
-              } else {
-                selectMinIndex = value;
-              }
-            });
+            if (isHour) {
+              timeManager.setHour(value);
+            } else {
+              timeManager.setMinute(value);
+            }
           },
           childDelegate: ListWheelChildBuilderDelegate(
             builder: (context, index) {
-              bool isSelect =
-                  isHour ? index == selectHourIndex : index == selectMinIndex;
+              int selectedIndex =
+                  isHour ? timeManager.hour : timeManager.minute;
+              bool isSelect = index == selectedIndex;
 
               return Text(
                 "${index + num}",
@@ -325,7 +326,13 @@ class _NewAlarmePageState extends State<NewAlarmePage>
         height: 55,
         width: 150,
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            // AlarmClockModel newAlarm = AlarmClockModel(hour: );
+            // Provider.of<AlarmClockManager>(
+            //   context,
+            //   listen: false,
+            // ).addNewAlarm();
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: CustomColors.supernova,
           ),

@@ -10,8 +10,12 @@ class AlarmClockManager extends ChangeNotifier {
   List<AlarmClockModel> alarmsList = [];
   final DataBaseRepository dataBaseRepository = DataBaseRepository();
   RepeatOption _selectedOption = RepeatOption.once;
+  int _hour = 0;
+  int _minute = 0;
 
   RepeatOption get selectedOption => _selectedOption;
+  int get hour => _hour;
+  int get minute => _minute;
 
   Future<void> getAlarms() async {
     try {
@@ -24,7 +28,7 @@ class AlarmClockManager extends ChangeNotifier {
     }
   }
 
-  Future<void> newAlarm(AlarmClockModel newAlarm) async {
+  Future<void> addNewAlarm(AlarmClockModel newAlarm) async {
     try {
       await dataBaseRepository.insertNewAlarm(newAlarm);
       notifyListeners();
@@ -52,6 +56,16 @@ class AlarmClockManager extends ChangeNotifier {
 
   void alarmRepeationOption(RepeatOption option) {
     _selectedOption = option;
+    notifyListeners();
+  }
+
+  void setHour(int value) {
+    _hour = value;
+    notifyListeners();
+  }
+
+  void setMinute(int value) {
+    _minute = value;
     notifyListeners();
   }
 }
