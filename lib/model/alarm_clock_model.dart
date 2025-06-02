@@ -12,7 +12,7 @@ class AlarmClockModel {
   int? id;
   int? hour;
   int? minute;
-  String? title = "";
+  String? title;
   bool? vibrate = true;
   bool? activate = false;
   String? song;
@@ -22,10 +22,10 @@ class AlarmClockModel {
       id: json["idColumn"],
       hour: json["hourColumn"],
       minute: json["minuteColumn"],
-      title: json["titleColumn"],
-      vibrate: json["vibrateColumn"],
-      activate: json["activateColumn"],
-      song: json["songColumn"],
+      title: json["titleColumn"] ?? "",
+      vibrate: json["vibrateColumn"] ?? true,
+      activate: json["activateColumn"] ?? false,
+      song: json["songColumn"] ?? "assets/wake_up_at_7am.mp3",
     );
   }
 
@@ -34,10 +34,10 @@ class AlarmClockModel {
       "idColumn": id,
       "hourColumn": hour,
       "minuteColumn": minute,
-      "titleColumn": title,
-      "vibrateColumn": vibrate,
-      "activateColumn": activate,
-      "songColumn": song,
+      "titleColumn": title ?? "",
+      "vibrateColumn": vibrate ?? true,
+      "activateColumn": activate ?? false,
+      "songColumn": song ?? "assets/wake_up_at_7am.mp3",
     };
   }
 }

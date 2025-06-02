@@ -326,12 +326,21 @@ class _NewAlarmePageState extends State<NewAlarmePage>
         height: 55,
         width: 150,
         child: ElevatedButton(
-          onPressed: () {
-            // AlarmClockModel newAlarm = AlarmClockModel(hour: );
-            // Provider.of<AlarmClockManager>(
-            //   context,
-            //   listen: false,
-            // ).addNewAlarm();
+          onPressed: () async {
+            final manager = Provider.of<AlarmClockManager>(
+              context,
+              listen: false,
+            );
+
+            AlarmClockModel newAlarm = AlarmClockModel(
+              hour: manager.hour,
+              minute: manager.minute,
+              title: "",
+              vibrate: true,
+              activate: true,
+              song: "assets/wake_up_at_7am.mp3",
+            );
+            await manager.addNewAlarm(newAlarm);
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: CustomColors.supernova,
