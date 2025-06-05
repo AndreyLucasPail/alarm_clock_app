@@ -39,8 +39,8 @@ class DataBaseRepository {
       onCreate: (db, newerVersion) async {
         db.execute(
           'CREATE TABLE $alarmClockTable ($id INTEGER PRIMARY KEY AUTOINCREMENT, $hourColumn INTEGER,'
-          ' $minuteColumn INTEGER, $titleColumn STRING, $repeatColumn INTEGER, $vibrateColumn BOOL,'
-          ' $activateColumn BOOL, $songColumn STRING)',
+          ' $minuteColumn INTEGER, $titleColumn STRING, $repeatColumn INTEGER, $vibrateColumn INTEGER,'
+          ' $activateColumn INTEGER, $songColumn STRING)',
         );
       },
     );
@@ -81,5 +81,10 @@ class DataBaseRepository {
       where: "$id = ?",
       whereArgs: [alarm.id],
     );
+  }
+
+  Future deleteDB() async {
+    Database? alarmDb = await db;
+    alarmDb!.delete(alarmClockTable);
   }
 }

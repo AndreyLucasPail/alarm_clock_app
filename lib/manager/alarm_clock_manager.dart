@@ -54,6 +54,14 @@ class AlarmClockManager extends ChangeNotifier {
     }
   }
 
+  Future<void> deleteDb() async {
+    try {
+      await dataBaseRepository.deleteDB();
+    } catch (e) {
+      print("Não foi possivel deletar o banco de dados :$e manager");
+    }
+  }
+
   void alarmRepeationOption(RepeatOption option) {
     _selectedOption = option;
     notifyListeners();

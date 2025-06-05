@@ -13,8 +13,8 @@ class AlarmClockModel {
   int? hour;
   int? minute;
   String? title;
-  bool? vibrate = true;
-  bool? activate = false;
+  int? vibrate = 1;
+  int? activate = 0;
   String? song;
 
   factory AlarmClockModel.fromJson(Map<String, dynamic> json) {
@@ -23,8 +23,8 @@ class AlarmClockModel {
       hour: json["hourColumn"],
       minute: json["minuteColumn"],
       title: json["titleColumn"] ?? "",
-      vibrate: json["vibrateColumn"] ?? true,
-      activate: json["activateColumn"] ?? false,
+      vibrate: json["vibrateColumn"] ?? 1,
+      activate: json["activateColumn"] ?? 0,
       song: json["songColumn"] ?? "assets/wake_up_at_7am.mp3",
     );
   }
@@ -35,8 +35,8 @@ class AlarmClockModel {
       "hourColumn": hour,
       "minuteColumn": minute,
       "titleColumn": title ?? "",
-      "vibrateColumn": vibrate ?? true,
-      "activateColumn": activate ?? false,
+      "vibrateColumn": vibrate ?? 1,
+      "activateColumn": activate ?? 0,
       "songColumn": song ?? "assets/wake_up_at_7am.mp3",
     };
   }

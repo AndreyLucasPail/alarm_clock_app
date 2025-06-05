@@ -336,8 +336,8 @@ class _NewAlarmePageState extends State<NewAlarmePage>
               hour: manager.hour,
               minute: manager.minute,
               title: "",
-              vibrate: true,
-              activate: true,
+              vibrate: 1,
+              activate: 1,
               song: "assets/wake_up_at_7am.mp3",
             );
             await manager.addNewAlarm(newAlarm);
