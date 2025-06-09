@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> with HomeMixin {
 
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: CustomColors.white,
+      backgroundColor: CustomColors.lavender,
       appBar: appBar(),
       body: body(),
       floatingActionButton: floatingButton(scaffoldKey),
@@ -56,7 +56,10 @@ class _HomePageState extends State<HomePage> with HomeMixin {
           itemBuilder: (__, index) {
             AlarmClockModel list = manager.alarmsList[index];
 
-            return alarmRow(list);
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: alarmRow(list),
+            );
           },
           separatorBuilder: (_, __) => SizedBox(height: 16),
           itemCount: manager.alarmsList.length,
@@ -67,7 +70,7 @@ class _HomePageState extends State<HomePage> with HomeMixin {
 
   PreferredSizeWidget appBar() {
     return AppBar(
-      backgroundColor: CustomColors.white,
+      backgroundColor: CustomColors.lavender,
       title: Align(
         alignment: Alignment.centerRight,
         child: Text(
@@ -120,8 +123,56 @@ class _HomePageState extends State<HomePage> with HomeMixin {
       decoration: BoxDecoration(
         color: CustomColors.supernova,
         borderRadius: BorderRadius.circular(40.0),
+        border: Border.all(color: CustomColors.white, width: 4),
       ),
-      child: Row(children: [Text("${list.hour}"), Text("${list.minute}")]),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned(
+            bottom: 0,
+            child: Text(
+              "AM",
+              style: TextStyle(
+                fontSize: 130,
+                color: Colors.white30,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 85,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "${list.hour}",
+                  style: TextStyle(
+                    fontSize: 50,
+                    color: CustomColors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  ":",
+                  style: TextStyle(
+                    fontSize: 50,
+                    color: CustomColors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  "${list.minute}",
+                  style: TextStyle(
+                    fontSize: 50,
+                    color: CustomColors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

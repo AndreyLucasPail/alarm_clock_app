@@ -71,11 +71,12 @@ class _CustomSwitchState extends State<CustomSwitch>
                 : widget.valueChanged(false);
           },
           child: Container(
-            height: 130,
-            width: 80,
+            height: 140,
+            width: 90,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(36),
-              color: CustomColors.lavender,
+              borderRadius: BorderRadius.circular(50),
+              color: CustomColors.gray400,
+              border: Border.all(color: CustomColors.white, width: 3),
             ),
             child: Container(
               padding: EdgeInsets.all(6.0),

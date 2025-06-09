@@ -8,5 +8,6 @@ class CustomColors {
   static const Color lavender = Color(0xFFE7EEFB);
   static const Color supernova = Color(0xFFFFC03D);
   static const Color gray = Color(0xFF9E9E9E);
-  static const Color green = Colors.green;
+  static const Color green = Color(0xFF4CAF50);
+  static const Color gray400 = Color(0xFFBDBDBD);
 }
