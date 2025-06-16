@@ -31,6 +31,7 @@ class AlarmClockManager extends ChangeNotifier {
   Future<void> addNewAlarm(AlarmClockModel newAlarm) async {
     try {
       await dataBaseRepository.insertNewAlarm(newAlarm);
+      await getAlarms();
       notifyListeners();
     } catch (e) {
       print("Não foi possivel adicionar alarme :$e manager");
@@ -40,6 +41,7 @@ class AlarmClockManager extends ChangeNotifier {
   Future<void> delete(int alarmId) async {
     try {
       await dataBaseRepository.deleteAlarm(alarmId);
+      await getAlarms();
       notifyListeners();
     } catch (e) {
       print("Não foi possivel deletar alarme :$e manager");
