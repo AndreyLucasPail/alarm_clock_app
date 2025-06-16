@@ -5,6 +5,7 @@ import 'package:alarm_clock_app/model/alarm_clock_model.dart';
 import 'package:alarm_clock_app/utils/customcolors.dart';
 import 'package:alarm_clock_app/widgets/song_container.dart';
 import 'package:flutter/material.dart';
+import 'package:alarm_clock_app/data/alarm_song.dart';
 import 'package:provider/provider.dart';
 
 class NewAlarmePage extends StatefulWidget {
@@ -176,28 +177,29 @@ class _NewAlarmePageState extends State<NewAlarmePage>
     return Wrap(
       spacing: 10,
       runSpacing: 10,
-      children: [
-        SongContainer(
-          color: CustomColors.redOrange,
-          path: "alarmtypebeatf.mp3",
-          songSelected: SelectedSong.alarmType,
-        ),
-        SongContainer(
-          color: CustomColors.rotPurple,
-          path: "plantasia_alarm.mp3",
-          songSelected: SelectedSong.plantasia,
-        ),
-        SongContainer(
-          color: CustomColors.supernova,
-          path: "wake_up_at_7am.mp3",
-          songSelected: SelectedSong.wake7am,
-        ),
-        SongContainer(
-          color: CustomColors.black,
-          path: "wake_up_now.mp3",
-          songSelected: SelectedSong.wakeNow,
-        ),
-      ],
+      children: alarmSong.map((song) => SongContainer(song: song)).toList(),
+      // children: [
+      //   SongContainer(
+      //     color: CustomColors.redOrange,
+      //     path: "alarmtypebeatf.mp3",
+      //     songSelected: SelectedSong.alarmType,
+      //   ),
+      //   SongContainer(
+      //     color: CustomColors.rotPurple,
+      //     path: "plantasia_alarm.mp3",
+      //     songSelected: SelectedSong.plantasia,
+      //   ),
+      //   SongContainer(
+      //     color: CustomColors.supernova,
+      //     path: "wake_up_at_7am.mp3",
+      //     songSelected: SelectedSong.wake7am,
+      //   ),
+      //   SongContainer(
+      //     color: CustomColors.black,
+      //     path: "wake_up_now.mp3",
+      //     songSelected: SelectedSong.wakeNow,
+      //   ),
+      // ],
     );
   }
 

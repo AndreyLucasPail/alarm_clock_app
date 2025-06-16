@@ -1,21 +1,15 @@
 import 'dart:math' as math;
 
+import 'package:alarm_clock_app/data/alarm_song.dart';
 import 'package:alarm_clock_app/manager/song_player_manager.dart';
 import 'package:alarm_clock_app/utils/customcolors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SongContainer extends StatefulWidget {
-  const SongContainer({
-    super.key,
-    required this.path,
-    required this.color,
-    required this.songSelected,
-  });
+  const SongContainer({super.key, required this.song});
 
-  final String? path;
-  final Color color;
-  final SelectedSong songSelected;
+  final AlarmSong song;
 
   @override
   State<SongContainer> createState() => _SongContainerState();
@@ -54,23 +48,23 @@ class _SongContainerState extends State<SongContainer>
   Widget build(BuildContext context) {
     return Consumer<SongPlayerManager>(
       builder: (_, songManeger, __) {
-        final isCurrentSong = songManeger.currentSong == widget.path;
-        final bool selectSong = songManeger.selected == widget.songSelected;
+        final isCurrentSong = songManeger.currentSong == widget.song.path;
+        final bool selectSong = songManeger.currentSong == widget.song.path;
         handleAnimation(isCurrentSong);
         return InkWell(
           onTap: () async {
-            await songManeger.toggleSong(widget.path!);
-            songManeger.selectedSong(widget.songSelected);
+            await songManeger.toggleSong(widget.song);
+            songManeger.selectedSong(widget.song);
           },
           child: Container(
             height: 250,
             width: 180,
             padding: EdgeInsets.all(8.0),
             decoration: BoxDecoration(
-              color: widget.color,
+              color: widget.song.color,
               borderRadius: BorderRadius.circular(24.0),
               border: Border.all(
-                color: selectSong ? CustomColors.green : widget.color,
+                color: selectSong ? CustomColors.green : widget.song.color,
                 width: 10,
               ),
             ),

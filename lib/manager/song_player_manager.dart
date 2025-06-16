@@ -1,3 +1,4 @@
+import 'package:alarm_clock_app/data/alarm_song.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
@@ -6,19 +7,20 @@ enum SelectedSong { alarmType, plantasia, wake7am, wakeNow }
 class SongPlayerManager extends ChangeNotifier {
   final AudioPlayer audioPlayer = AudioPlayer();
   String? _currentSong;
-  SelectedSong _selected = SelectedSong.wake7am;
+  //SelectedSong _selected = SelectedSong.wake7am;
+  AlarmSong? _selectedSong;
 
   String? get currentSong => _currentSong;
-  SelectedSong? get selected => _selected;
+  AlarmSong? get selecSong => _selectedSong;
 
-  Future<void> toggleSong(String path) async {
-    if (_currentSong == path) {
+  Future<void> toggleSong(AlarmSong path) async {
+    if (_currentSong == path.path) {
       await audioPlayer.stop();
       _currentSong = null;
     } else {
       await audioPlayer.stop();
-      await audioPlayer.play(AssetSource(path));
-      _currentSong = path;
+      await audioPlayer.play(AssetSource(path.path));
+      _currentSong = path.path;
     }
     notifyListeners();
   }
@@ -30,8 +32,8 @@ class SongPlayerManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void selectedSong(SelectedSong songSelected) {
-    _selected = songSelected;
+  void selectedSong(AlarmSong songSelected) {
+    _selectedSong = songSelected;
     notifyListeners();
   }
 }
