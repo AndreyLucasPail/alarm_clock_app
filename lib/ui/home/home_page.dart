@@ -105,11 +105,10 @@ class _HomePageState extends State<HomePage> with HomeMixin {
       children: [
         alarmCard(list),
         CustomSwitch(
-          value: activateB,
+          value: list.activate == 1,
           valueChanged: (bool value) {
-            setState(() {
-              activateB = value;
-            });
+            list.activate = value ? 1 : 0;
+            Provider.of<AlarmClockManager>(context, listen: false).update(list);
           },
         ),
       ],
@@ -145,7 +144,7 @@ class _HomePageState extends State<HomePage> with HomeMixin {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "${list.hour}",
+                  list.hour.toString().padLeft(2, "0"),
                   style: TextStyle(
                     fontSize: 50,
                     color: CustomColors.black,
@@ -161,7 +160,7 @@ class _HomePageState extends State<HomePage> with HomeMixin {
                   ),
                 ),
                 Text(
-                  "${list.minute}",
+                  list.minute.toString().padLeft(2, "0"),
                   style: TextStyle(
                     fontSize: 50,
                     color: CustomColors.black,

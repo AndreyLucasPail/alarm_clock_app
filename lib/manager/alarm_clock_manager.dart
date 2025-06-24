@@ -51,6 +51,7 @@ class AlarmClockManager extends ChangeNotifier {
   Future<void> update(AlarmClockModel alarm) async {
     try {
       await dataBaseRepository.updateAlarm(alarm);
+      await getAlarms();
     } catch (e) {
       print("Não foi possivel editar alarme :$e manager");
     }

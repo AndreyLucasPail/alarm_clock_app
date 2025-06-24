@@ -324,7 +324,7 @@ class _NewAlarmePageState extends State<NewAlarmePage>
               title: "",
               vibrate: 1,
               activate: 1,
-              song: selectedSong!.path,
+              song: selectedSong?.path ?? "wake_up_at_7am.mp3",
             );
             await manager.addNewAlarm(newAlarm);
           },
