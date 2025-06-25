@@ -75,6 +75,8 @@ class _NewAlarmePageState extends State<NewAlarmePage>
     final timeManager = Provider.of<AlarmClockManager>(context, listen: true);
     final isHour = controller == hourController;
 
+    final List<String> items = isHour ? hour : minute;
+
     return Flexible(
       child: SizedBox(
         height: 250,
@@ -88,22 +90,28 @@ class _NewAlarmePageState extends State<NewAlarmePage>
               timeManager.setMinute(value);
             }
           },
-          childDelegate: ListWheelChildBuilderDelegate(
-            builder: (context, index) {
-              int selectedIndex =
-                  isHour ? timeManager.hour : timeManager.minute;
-              bool isSelect = index == selectedIndex;
+          childDelegate: ListWheelChildLoopingListDelegate(
+            children:
+                items.map((text) {
+                  final bool isSelected =
+                      text ==
+                      (isHour ? timeManager.hour : timeManager.minute)
+                          .toString()
+                          .padLeft(2, '0');
 
-              return Text(
-                "${index + num}",
-                style: TextStyle(
-                  color: isSelect ? CustomColors.redOrange : CustomColors.black,
-                  fontSize: 30,
-                  fontWeight: isSelect ? FontWeight.bold : FontWeight.normal,
-                ),
-              );
-            },
-            childCount: generate,
+                  return Text(
+                    text,
+                    style: TextStyle(
+                      color:
+                          isSelected
+                              ? CustomColors.redOrange
+                              : CustomColors.black,
+                      fontSize: 30,
+                      fontWeight:
+                          isSelected ? FontWeight.bold : FontWeight.normal,
+                    ),
+                  );
+                }).toList(),
           ),
         ),
       ),
@@ -327,6 +335,7 @@ class _NewAlarmePageState extends State<NewAlarmePage>
               song: selectedSong?.path ?? "wake_up_at_7am.mp3",
             );
             await manager.addNewAlarm(newAlarm);
+            Navigator.pop(context);
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: CustomColors.supernova,
