@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> with HomeMixin {
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: CustomColors.lavender,
-      appBar: appBar(),
+      // appBar: appBar(),
       body: body(),
       floatingActionButton: floatingButton(scaffoldKey),
     );
@@ -68,23 +68,23 @@ class _HomePageState extends State<HomePage> with HomeMixin {
     );
   }
 
-  PreferredSizeWidget appBar() {
-    return AppBar(
-      backgroundColor: CustomColors.lavender,
-      title: Align(
-        alignment: Alignment.centerRight,
-        child: Text(
-          "Alarm",
-          style: TextStyle(
-            color: CustomColors.black,
-            fontSize: 24.0,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 1,
-          ),
-        ),
-      ),
-    );
-  }
+  // PreferredSizeWidget appBar() {
+  //   return AppBar(
+  //     backgroundColor: CustomColors.lavender,
+  //     title: Align(
+  //       alignment: Alignment.centerRight,
+  //       child: Text(
+  //         "Alarm",
+  //         style: TextStyle(
+  //           color: CustomColors.black,
+  //           fontSize: 24.0,
+  //           fontWeight: FontWeight.bold,
+  //           letterSpacing: 1,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget floatingButton(GlobalKey<ScaffoldState> scaffoldKey) {
     return SizedBox(
@@ -116,62 +116,84 @@ class _HomePageState extends State<HomePage> with HomeMixin {
   }
 
   Widget alarmCard(AlarmClockModel list) {
-    return Container(
-      height: 260,
-      width: 230,
-      decoration: BoxDecoration(
-        color: CustomColors.supernova,
-        borderRadius: BorderRadius.circular(40.0),
-        border: Border.all(color: CustomColors.white, width: 4),
-      ),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Positioned(
-            bottom: 0,
-            child: Text(
-              "AM",
-              style: TextStyle(
-                fontSize: 130,
-                color: Colors.white30,
-                fontWeight: FontWeight.bold,
+    return GestureDetector(
+      onTap: () => editAlarmDialog(),
+      child: Container(
+        height: 260,
+        width: 230,
+        decoration: BoxDecoration(
+          color: CustomColors.supernova,
+          borderRadius: BorderRadius.circular(40.0),
+          border: Border.all(color: CustomColors.white, width: 4),
+        ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Positioned(
+              bottom: 0,
+              child: Text(
+                "AM",
+                style: TextStyle(
+                  fontSize: 130,
+                  color: Colors.white30,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-          Positioned(
-            bottom: 85,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  list.hour.toString().padLeft(2, "0"),
-                  style: TextStyle(
-                    fontSize: 50,
-                    color: CustomColors.black,
-                    fontWeight: FontWeight.bold,
+            Positioned(
+              bottom: 85,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    list.hour.toString().padLeft(2, "0"),
+                    style: TextStyle(
+                      fontSize: 50,
+                      color: CustomColors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                Text(
-                  ":",
-                  style: TextStyle(
-                    fontSize: 50,
-                    color: CustomColors.black,
-                    fontWeight: FontWeight.bold,
+                  Text(
+                    ":",
+                    style: TextStyle(
+                      fontSize: 50,
+                      color: CustomColors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                Text(
-                  list.minute.toString().padLeft(2, "0"),
-                  style: TextStyle(
-                    fontSize: 50,
-                    color: CustomColors.black,
-                    fontWeight: FontWeight.bold,
+                  Text(
+                    list.minute.toString().padLeft(2, "0"),
+                    style: TextStyle(
+                      fontSize: 50,
+                      color: CustomColors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
+    );
+  }
+
+  Future editAlarmDialog() {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.4,
+          decoration: BoxDecoration(
+            color: CustomColors.black,
+            borderRadius: BorderRadius.circular(24.0),
+          ),
+          child: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(Icons.close),
+          ),
+        );
+      },
     );
   }
 }
