@@ -115,9 +115,9 @@ class _HomePageState extends State<HomePage> with HomeMixin {
     );
   }
 
-  Widget alarmCard(AlarmClockModel list) {
+  Widget alarmCard(AlarmClockModel time) {
     return GestureDetector(
-      onTap: () => editAlarmDialog(),
+      onTap: () => editAlarmDialog(time),
       child: Container(
         height: 260,
         width: 230,
@@ -146,7 +146,7 @@ class _HomePageState extends State<HomePage> with HomeMixin {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    list.hour.toString().padLeft(2, "0"),
+                    time.hour.toString().padLeft(2, "0"),
                     style: TextStyle(
                       fontSize: 50,
                       color: CustomColors.black,
@@ -162,7 +162,7 @@ class _HomePageState extends State<HomePage> with HomeMixin {
                     ),
                   ),
                   Text(
-                    list.minute.toString().padLeft(2, "0"),
+                    time.minute.toString().padLeft(2, "0"),
                     style: TextStyle(
                       fontSize: 50,
                       color: CustomColors.black,
@@ -178,20 +178,69 @@ class _HomePageState extends State<HomePage> with HomeMixin {
     );
   }
 
-  Future editAlarmDialog() {
+  Future editAlarmDialog(AlarmClockModel time) {
     return showDialog(
       context: context,
       builder: (context) {
-        return Container(
-          height: MediaQuery.of(context).size.height * 0.4,
-          decoration: BoxDecoration(
-            color: CustomColors.black,
-            borderRadius: BorderRadius.circular(24.0),
-          ),
-          child: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: Icon(Icons.close),
-          ),
+        return StatefulBuilder(
+          builder: (context, state) {
+            return Dialog(
+              child: Container(
+                padding: EdgeInsets.all(16.0),
+                height: MediaQuery.of(context).size.height * 0.5,
+                width: MediaQuery.of(context).size.width * 0.8,
+                decoration: BoxDecoration(
+                  color: CustomColors.white,
+                  borderRadius: BorderRadius.circular(24.0),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          time.hour.toString().padLeft(2, "0"),
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: CustomColors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          ":",
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: CustomColors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          time.minute.toString().padLeft(2, "0"),
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: CustomColors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Spacer(),
+                        Switch(
+                          value: time.activate == 1,
+                          onChanged: (bool value) {
+                            state(() {
+                              time.activate = value ? 1 : 0;
+                            });
+                            Provider.of<AlarmClockManager>(
+                              context,
+                              listen: false,
+                            ).update(time);
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
         );
       },
     );
