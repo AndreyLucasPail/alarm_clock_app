@@ -236,6 +236,17 @@ class _HomePageState extends State<HomePage> with HomeMixin {
                         ),
                       ],
                     ),
+                    Row(
+                      children: [
+                        selectTimeWheel(hourController),
+                        line(),
+                        selectTimeWheel(minuteController),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [additionalSettingsButton(), saveButton()],
+                    ),
                   ],
                 ),
               ),
@@ -243,6 +254,80 @@ class _HomePageState extends State<HomePage> with HomeMixin {
           },
         );
       },
+    );
+  }
+
+  Widget selectTimeWheel(FixedExtentScrollController controller) {
+    final timeManager = Provider.of<AlarmClockManager>(context, listen: true);
+    final isHour = controller == hourController;
+
+    final List<String> items = isHour ? hour : minute;
+
+    return Flexible(
+      child: SizedBox(
+        height: 150,
+        child: ListWheelScrollView.useDelegate(
+          itemExtent: 80,
+          onSelectedItemChanged: (value) {
+            if (isHour) {
+              timeManager.setHour(value);
+            } else {
+              timeManager.setMinute(value);
+            }
+          },
+          childDelegate: ListWheelChildLoopingListDelegate(
+            children:
+                items.map((text) {
+                  final bool isSelected =
+                      text ==
+                      (isHour ? timeManager.hour : timeManager.minute)
+                          .toString()
+                          .padLeft(2, '0');
+                  return Text(
+                    text,
+                    style: TextStyle(
+                      color:
+                          isSelected
+                              ? CustomColors.redOrange
+                              : CustomColors.black,
+                      fontSize: 30,
+                      fontWeight:
+                          isSelected ? FontWeight.bold : FontWeight.normal,
+                    ),
+                  );
+                }).toList(),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget line() {
+    return Container(
+      height: 150,
+      width: 1,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            CustomColors.gray,
+            CustomColors.rotPurple,
+            CustomColors.rotPurple,
+            CustomColors.gray,
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget additionalSettingsButton() {
+    return SizedBox(
+      child: ElevatedButton(onPressed: () {}, child: Text("Concluido")),
+    );
+  }
+
+  Widget saveButton() {
+    return SizedBox(
+      child: ElevatedButton(onPressed: () {}, child: Text("Concluido")),
     );
   }
 }
