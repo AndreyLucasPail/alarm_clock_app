@@ -1,6 +1,7 @@
 import 'package:alarm_clock_app/manager/alarm_clock_manager.dart';
 import 'package:alarm_clock_app/mixins/home_mixin.dart';
 import 'package:alarm_clock_app/model/alarm_clock_model.dart';
+import 'package:alarm_clock_app/ui/edit_alarm/edit_alarm.dart';
 import 'package:alarm_clock_app/ui/new_alarm/new_alarme_page.dart';
 import 'package:alarm_clock_app/utils/customcolors.dart';
 import 'package:alarm_clock_app/widgets/custom_switch.dart';
@@ -187,7 +188,7 @@ class _HomePageState extends State<HomePage> with HomeMixin {
             return Dialog(
               child: Container(
                 padding: EdgeInsets.all(16.0),
-                height: MediaQuery.of(context).size.height * 0.5,
+                height: MediaQuery.of(context).size.height * 0.4,
                 width: MediaQuery.of(context).size.width * 0.8,
                 decoration: BoxDecoration(
                   color: CustomColors.white,
@@ -238,11 +239,12 @@ class _HomePageState extends State<HomePage> with HomeMixin {
                     ),
                     Row(
                       children: [
-                        selectTimeWheel(hourController),
+                        selectTimeWheel(hourController, state),
                         line(),
-                        selectTimeWheel(minuteController),
+                        selectTimeWheel(minuteController, state),
                       ],
                     ),
+                    Spacer(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [additionalSettingsButton(), saveButton()],
@@ -257,7 +259,7 @@ class _HomePageState extends State<HomePage> with HomeMixin {
     );
   }
 
-  Widget selectTimeWheel(FixedExtentScrollController controller) {
+  Widget selectTimeWheel(FixedExtentScrollController controller, state) {
     final timeManager = Provider.of<AlarmClockManager>(context, listen: true);
     final isHour = controller == hourController;
 
@@ -267,13 +269,15 @@ class _HomePageState extends State<HomePage> with HomeMixin {
       child: SizedBox(
         height: 150,
         child: ListWheelScrollView.useDelegate(
-          itemExtent: 80,
+          itemExtent: 55,
           onSelectedItemChanged: (value) {
-            if (isHour) {
-              timeManager.setHour(value);
-            } else {
-              timeManager.setMinute(value);
-            }
+            state(() {
+              if (isHour) {
+                timeManager.setHour(value);
+              } else {
+                timeManager.setMinute(value);
+              }
+            });
           },
           childDelegate: ListWheelChildLoopingListDelegate(
             children:
@@ -321,13 +325,38 @@ class _HomePageState extends State<HomePage> with HomeMixin {
 
   Widget additionalSettingsButton() {
     return SizedBox(
-      child: ElevatedButton(onPressed: () {}, child: Text("Concluido")),
+      height: 50,
+      width: 140,
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.pushNamed(context, EditAlarm.tag);
+          Navigator.pop(context);
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: CustomColors.rotPurple,
+        ),
+        child: Text(
+          "Configurações adicionais",
+          style: TextStyle(color: CustomColors.white, fontSize: 13),
+        ),
+      ),
     );
   }
 
   Widget saveButton() {
     return SizedBox(
-      child: ElevatedButton(onPressed: () {}, child: Text("Concluido")),
+      height: 50,
+      width: 140,
+      child: ElevatedButton(
+        onPressed: () {},
+        style: ElevatedButton.styleFrom(
+          backgroundColor: CustomColors.rotPurple,
+        ),
+        child: Text(
+          "Concluido",
+          style: TextStyle(color: CustomColors.white, fontSize: 18),
+        ),
+      ),
     );
   }
 }

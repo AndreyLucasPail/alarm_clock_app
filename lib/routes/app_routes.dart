@@ -1,3 +1,4 @@
+import 'package:alarm_clock_app/ui/edit_alarm/edit_alarm.dart';
 import 'package:alarm_clock_app/ui/home/home_page.dart';
 import 'package:alarm_clock_app/ui/new_alarm/new_alarme_page.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,8 @@ class AppRoutes {
         return const HomePage();
       case NewAlarmePage.tag:
         return const NewAlarmePage();
+      case EditAlarm.tag:
+        return const EditAlarm();
       default:
         return null;
     }
