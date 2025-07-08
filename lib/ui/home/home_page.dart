@@ -334,7 +334,7 @@ class _HomePageState extends State<HomePage> with HomeMixin {
             EditAlarm.tag,
             arguments: EditAlarmArgs(alarm),
           );
-          Navigator.pop(context);
+          // Navigator.pop(context);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: CustomColors.rotPurple,
