@@ -36,7 +36,17 @@ class _EditAlarmState extends State<EditAlarm> with EditAlarmMixin {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 40.0),
-        child: Column(children: [customAppBar()]),
+        child: Column(
+          children: [
+            customAppBar(),
+            Row(
+              children: [
+                selectTimeWheel(hourController),
+                selectTimeWheel(minuteController),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -81,9 +91,9 @@ class _EditAlarmState extends State<EditAlarm> with EditAlarmMixin {
     final List<String> items = isHour ? hour : minute;
     return Flexible(
       child: SizedBox(
-        height: 150,
+        height: 300,
         child: ListWheelScrollView.useDelegate(
-          itemExtent: 55,
+          itemExtent: 60,
           onSelectedItemChanged: (value) {
             if (isHour) {
               timeManager.setHour(value);
@@ -94,7 +104,23 @@ class _EditAlarmState extends State<EditAlarm> with EditAlarmMixin {
           childDelegate: ListWheelChildLoopingListDelegate(
             children:
                 items.map((time) {
-                  return Container();
+                  final isSelected =
+                      time ==
+                      (isHour ? timeManager.hour : timeManager.minute)
+                          .toString()
+                          .padLeft(2, "0");
+                  return Text(
+                    time,
+                    style: TextStyle(
+                      color:
+                          isSelected
+                              ? CustomColors.redOrange
+                              : CustomColors.black,
+                      fontSize: 30,
+                      fontWeight:
+                          isSelected ? FontWeight.bold : FontWeight.normal,
+                    ),
+                  );
                 }).toList(),
           ),
         ),
