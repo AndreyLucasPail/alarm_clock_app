@@ -247,7 +247,7 @@ class _HomePageState extends State<HomePage> with HomeMixin {
                     Spacer(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [additionalSettingsButton(), saveButton()],
+                      children: [additionalSettingsButton(time), saveButton()],
                     ),
                   ],
                 ),
@@ -323,13 +323,17 @@ class _HomePageState extends State<HomePage> with HomeMixin {
     );
   }
 
-  Widget additionalSettingsButton() {
+  Widget additionalSettingsButton(AlarmClockModel alarm) {
     return SizedBox(
       height: 50,
       width: 140,
       child: ElevatedButton(
         onPressed: () {
-          Navigator.pushNamed(context, EditAlarm.tag);
+          Navigator.pushNamed(
+            context,
+            EditAlarm.tag,
+            arguments: EditAlarmArgs(alarm),
+          );
           Navigator.pop(context);
         },
         style: ElevatedButton.styleFrom(

@@ -17,7 +17,8 @@ class AppRoutes {
       case NewAlarmePage.tag:
         return const NewAlarmePage();
       case EditAlarm.tag:
-        return const EditAlarm();
+        final args = settings.arguments as EditAlarmArgs;
+        return EditAlarm(alarm: args.alarm);
       default:
         return null;
     }
