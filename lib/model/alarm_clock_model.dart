@@ -7,6 +7,7 @@ class AlarmClockModel {
     required this.vibrate,
     required this.activate,
     required this.song,
+    required this.deleteAlarm,
   });
 
   int? id;
@@ -16,6 +17,7 @@ class AlarmClockModel {
   int? vibrate = 1;
   int? activate = 0;
   String? song;
+  int? deleteAlarm = 0;
 
   factory AlarmClockModel.fromJson(Map<String, dynamic> json) {
     return AlarmClockModel(
@@ -26,6 +28,7 @@ class AlarmClockModel {
       vibrate: json["vibrateColumn"] ?? 1,
       activate: json["activateColumn"] ?? 0,
       song: json["songColumn"] ?? "assets/wake_up_at_7am.mp3",
+      deleteAlarm: json["deleteColumn"] ?? 0,
     );
   }
 
@@ -38,6 +41,7 @@ class AlarmClockModel {
       "vibrateColumn": vibrate ?? 1,
       "activateColumn": activate ?? 0,
       "songColumn": song ?? "assets/wake_up_at_7am.mp3",
+      "deleteColumn": deleteAlarm ?? 0,
     };
   }
 }

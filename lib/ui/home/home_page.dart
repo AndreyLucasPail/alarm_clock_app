@@ -1,7 +1,7 @@
 import 'package:alarm_clock_app/manager/alarm_clock_manager.dart';
 import 'package:alarm_clock_app/mixins/home_mixin.dart';
 import 'package:alarm_clock_app/model/alarm_clock_model.dart';
-import 'package:alarm_clock_app/ui/edit_alarm/edit_alarm.dart';
+import 'package:alarm_clock_app/ui/edit_alarm/edit_alarm_page.dart';
 import 'package:alarm_clock_app/ui/new_alarm/new_alarme_page.dart';
 import 'package:alarm_clock_app/utils/customcolors.dart';
 import 'package:alarm_clock_app/widgets/custom_switch.dart';
@@ -331,7 +331,7 @@ class _HomePageState extends State<HomePage> with HomeMixin {
         onPressed: () {
           Navigator.pushNamed(
             context,
-            EditAlarm.tag,
+            EditAlarmPage.tag,
             arguments: EditAlarmArgs(alarm),
           );
           // Navigator.pop(context);

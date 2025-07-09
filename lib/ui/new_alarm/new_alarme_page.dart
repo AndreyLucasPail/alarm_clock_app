@@ -333,6 +333,7 @@ class _NewAlarmePageState extends State<NewAlarmePage>
               vibrate: 1,
               activate: 1,
               song: selectedSong?.path ?? "wake_up_at_7am.mp3",
+              deleteAlarm: 0,
             );
             await manager.addNewAlarm(newAlarm);
             Navigator.pop(context);

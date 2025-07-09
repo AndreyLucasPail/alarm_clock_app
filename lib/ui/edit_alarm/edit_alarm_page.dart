@@ -1,7 +1,10 @@
+import 'package:alarm_clock_app/data/alarm_song.dart';
 import 'package:alarm_clock_app/manager/alarm_clock_manager.dart';
+import 'package:alarm_clock_app/manager/song_player_manager.dart';
 import 'package:alarm_clock_app/mixins/edit_alarm_mixin.dart';
 import 'package:alarm_clock_app/model/alarm_clock_model.dart';
 import 'package:alarm_clock_app/utils/customcolors.dart';
+import 'package:alarm_clock_app/widgets/song_container.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,17 +13,17 @@ class EditAlarmArgs {
   AlarmClockModel alarm;
 }
 
-class EditAlarm extends StatefulWidget {
-  const EditAlarm({super.key, this.alarm});
+class EditAlarmPage extends StatefulWidget {
+  const EditAlarmPage({super.key, this.alarm});
 
   static const tag = "editAlarm";
   final AlarmClockModel? alarm;
 
   @override
-  State<EditAlarm> createState() => _EditAlarmState();
+  State<EditAlarmPage> createState() => _EditAlarmState();
 }
 
-class _EditAlarmState extends State<EditAlarm> with EditAlarmMixin {
+class _EditAlarmState extends State<EditAlarmPage> with EditAlarmMixin {
   @override
   void initState() {
     super.initState();
@@ -37,6 +40,7 @@ class _EditAlarmState extends State<EditAlarm> with EditAlarmMixin {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 40.0),
         child: Column(
+          spacing: 20,
           children: [
             customAppBar(),
             Row(
@@ -45,6 +49,8 @@ class _EditAlarmState extends State<EditAlarm> with EditAlarmMixin {
                 selectTimeWheel(minuteController),
               ],
             ),
+            selectSong(),
+            selectVibrate(),
           ],
         ),
       ),
@@ -126,5 +132,83 @@ class _EditAlarmState extends State<EditAlarm> with EditAlarmMixin {
         ),
       ),
     );
+  }
+
+  Widget selectSong() {
+    return InkWell(
+      onTap: () => songDialog(),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Toque",
+            style: TextStyle(fontSize: 20.0, color: CustomColors.black),
+          ),
+          Icon(Icons.arrow_forward_ios),
+        ],
+      ),
+    );
+  }
+
+  Future songDialog() {
+    return showDialog(
+      context: context,
+      builder:
+          (context) => Dialog.fullscreen(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Provider.of<SongPlayerManager>(
+                          context,
+                          listen: false,
+                        ).stop();
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(Icons.close),
+                    ),
+                    Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children:
+                          alarmSong
+                              .map((song) => SongContainer(song: song))
+                              .toList(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+    );
+  }
+
+  Widget selectVibrate() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "Vibrar quando o alarme disparar",
+          style: TextStyle(color: CustomColors.black, fontSize: 20.0),
+        ),
+        Switch(
+          value: widget.alarm!.activate == 1,
+          onChanged: (bool value) {
+            widget.alarm!.activate = value ? 1 : 0;
+            Provider.of<AlarmClockManager>(
+              context,
+              listen: true,
+            ).update(widget.alarm!);
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget deleteAlarm() {
+    return Row();
   }
 }
