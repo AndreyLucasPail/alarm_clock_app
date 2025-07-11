@@ -1,4 +1,5 @@
 import 'package:alarm_clock_app/model/alarm_clock_model.dart';
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -41,7 +42,7 @@ class DataBaseRepository {
         db.execute(
           'CREATE TABLE $alarmClockTable ($id INTEGER PRIMARY KEY AUTOINCREMENT, $hourColumn INTEGER,'
           ' $minuteColumn INTEGER, $titleColumn STRING, $repeatColumn INTEGER, $vibrateColumn INTEGER,'
-          ' $activateColumn INTEGER, $songColumn STRING, $deleteColumn INT)',
+          ' $activateColumn INTEGER, $songColumn STRING, $deleteColumn INTEGER)',
         );
       },
     );
@@ -86,6 +87,9 @@ class DataBaseRepository {
 
   Future deleteDB() async {
     Database? alarmDb = await db;
+    String path = join(await getDatabasesPath(), 'alarm.db');
     alarmDb!.delete(alarmClockTable);
+    await deleteDatabase(path);
+    print("DATABASE DELETADO");
   }
 }

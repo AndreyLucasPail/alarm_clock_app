@@ -22,6 +22,7 @@ class _HomePageState extends State<HomePage> with HomeMixin {
   void initState() {
     super.initState();
     final managerP = Provider.of<AlarmClockManager>(context, listen: false);
+
     managerP.getAlarms();
     initMixin();
   }
@@ -68,24 +69,6 @@ class _HomePageState extends State<HomePage> with HomeMixin {
       },
     );
   }
-
-  // PreferredSizeWidget appBar() {
-  //   return AppBar(
-  //     backgroundColor: CustomColors.lavender,
-  //     title: Align(
-  //       alignment: Alignment.centerRight,
-  //       child: Text(
-  //         "Alarm",
-  //         style: TextStyle(
-  //           color: CustomColors.black,
-  //           fontSize: 24.0,
-  //           fontWeight: FontWeight.bold,
-  //           letterSpacing: 1,
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   Widget floatingButton(GlobalKey<ScaffoldState> scaffoldKey) {
     return SizedBox(
