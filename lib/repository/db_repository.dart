@@ -1,5 +1,4 @@
 import 'package:alarm_clock_app/model/alarm_clock_model.dart';
-import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -87,9 +86,7 @@ class DataBaseRepository {
 
   Future deleteDB() async {
     Database? alarmDb = await db;
-    String path = join(await getDatabasesPath(), 'alarm.db');
+
     alarmDb!.delete(alarmClockTable);
-    await deleteDatabase(path);
-    print("DATABASE DELETADO");
   }
 }
