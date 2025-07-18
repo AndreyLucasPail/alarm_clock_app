@@ -51,6 +51,8 @@ class _EditAlarmState extends State<EditAlarmPage> with EditAlarmMixin {
             ),
             selectSong(),
             selectVibrate(),
+            deleteAlarm(),
+            alarmName(),
           ],
         ),
       ),
@@ -209,6 +211,97 @@ class _EditAlarmState extends State<EditAlarmPage> with EditAlarmMixin {
   }
 
   Widget deleteAlarm() {
-    return Row();
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "Excluir após o alarme disparar",
+          style: TextStyle(color: CustomColors.black, fontSize: 20.0),
+        ),
+        Switch(
+          value: widget.alarm!.deleteAlarm == 1,
+          onChanged: (bool value) {
+            widget.alarm!.deleteAlarm = value ? 1 : 0;
+            Provider.of<AlarmClockManager>(
+              context,
+              listen: true,
+            ).update(widget.alarm!);
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget alarmName() {
+    return InkWell(
+      onTap: () => textFieldBottomSheet(),
+      child: Container(
+        height: 60,
+        width: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: CustomColors.supernova,
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Nome",
+              style: TextStyle(color: CustomColors.black, fontSize: 20.0),
+            ),
+            Text(
+              "Inserir rótulo",
+              style: TextStyle(color: CustomColors.black, fontSize: 20.0),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future textFieldBottomSheet() {
+    return showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadiusGeometry.circular(24.0),
+      ),
+      context: context,
+      builder: (context) {
+        return Container(
+          padding: EdgeInsets.all(8.0),
+          height: 230,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            children: [
+              Text(
+                "Adicionar rótulo do alarme",
+                style: TextStyle(
+                  color: CustomColors.black,
+                  fontSize: 22.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextField(),
+              Row(
+                children: [
+                  SizedBox(
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      child: Text("data"),
+                    ),
+                  ),
+                  SizedBox(
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      child: Text("data"),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
