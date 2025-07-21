@@ -272,6 +272,7 @@ class _EditAlarmState extends State<EditAlarmPage> with EditAlarmMixin {
           height: 230,
           width: MediaQuery.of(context).size.width,
           child: Column(
+            spacing: 20,
             children: [
               Text(
                 "Adicionar rótulo do alarme",
@@ -283,15 +284,33 @@ class _EditAlarmState extends State<EditAlarmPage> with EditAlarmMixin {
               ),
               TextField(),
               Row(
+                spacing: 16.0,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
+                    height: 50,
+                    width: MediaQuery.of(context).size.width * 0.4,
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: CustomColors.supernova,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadiusGeometry.circular(16.0),
+                        ),
+                      ),
                       onPressed: () {},
                       child: Text("data"),
                     ),
                   ),
                   SizedBox(
+                    height: 50,
+                    width: MediaQuery.of(context).size.width * 0.4,
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: CustomColors.supernova,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadiusGeometry.circular(16.0),
+                        ),
+                      ),
                       onPressed: () {},
                       child: Text("data"),
                     ),
