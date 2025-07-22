@@ -262,62 +262,72 @@ class _EditAlarmState extends State<EditAlarmPage> with EditAlarmMixin {
 
   Future textFieldBottomSheet() {
     return showModalBottomSheet(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadiusGeometry.circular(24.0),
-      ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
       context: context,
       builder: (context) {
-        return Container(
-          padding: EdgeInsets.all(8.0),
-          height: 230,
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            spacing: 20,
-            children: [
-              Text(
-                "Adicionar rótulo do alarme",
-                style: TextStyle(
-                  color: CustomColors.black,
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.bold,
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+          ),
+          child: Container(
+            padding: EdgeInsets.all(8.0),
+            height: 230,
+            decoration: BoxDecoration(
+              color: CustomColors.white,
+              borderRadius: BorderRadius.circular(24.0),
+            ),
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              spacing: 20,
+              children: [
+                Text(
+                  "Adicionar rótulo do alarme",
+                  style: TextStyle(
+                    color: CustomColors.black,
+                    fontSize: 22.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              TextField(),
-              Row(
-                spacing: 16.0,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 50,
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: CustomColors.supernova,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadiusGeometry.circular(16.0),
+                TextField(
+                  decoration: InputDecoration(border: OutlineInputBorder()),
+                ),
+                Row(
+                  spacing: 16.0,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: CustomColors.supernova,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadiusGeometry.circular(16.0),
+                          ),
                         ),
+                        onPressed: () {},
+                        child: Text("data"),
                       ),
-                      onPressed: () {},
-                      child: Text("data"),
                     ),
-                  ),
-                  SizedBox(
-                    height: 50,
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: CustomColors.supernova,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadiusGeometry.circular(16.0),
+                    SizedBox(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: CustomColors.supernova,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadiusGeometry.circular(16.0),
+                          ),
                         ),
+                        onPressed: () {},
+                        child: Text("data"),
                       ),
-                      onPressed: () {},
-                      child: Text("data"),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         );
       },
