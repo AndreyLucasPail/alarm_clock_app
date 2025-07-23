@@ -163,6 +163,9 @@ class _HomePageState extends State<HomePage> with HomeMixin {
   }
 
   Future editAlarmDialog(AlarmClockModel time) {
+    hourController = FixedExtentScrollController(initialItem: time.hour!);
+    minuteController = FixedExtentScrollController(initialItem: time.minute!);
+
     return showDialog(
       context: context,
       builder: (context) {
@@ -253,6 +256,7 @@ class _HomePageState extends State<HomePage> with HomeMixin {
         height: 150,
         child: ListWheelScrollView.useDelegate(
           itemExtent: 55,
+          controller: controller,
           onSelectedItemChanged: (value) {
             state(() {
               if (isHour) {

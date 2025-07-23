@@ -25,7 +25,7 @@ mixin HomeMixin {
     initialHour = DateTime.now().hour;
     initialMinute = DateTime.now().minute;
 
-    hourController = FixedExtentScrollController(initialItem: initialHour);
-    minuteController = FixedExtentScrollController(initialItem: initialMinute);
+    hourController = FixedExtentScrollController();
+    minuteController = FixedExtentScrollController();
   }
 }

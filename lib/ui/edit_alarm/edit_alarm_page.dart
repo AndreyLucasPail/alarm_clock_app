@@ -301,13 +301,16 @@ class _EditAlarmState extends State<EditAlarmPage> with EditAlarmMixin {
                       width: MediaQuery.of(context).size.width * 0.4,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: CustomColors.supernova,
+                          backgroundColor: CustomColors.redOrange,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadiusGeometry.circular(16.0),
                           ),
                         ),
                         onPressed: () {},
-                        child: Text("data"),
+                        child: Text(
+                          "Cancelar",
+                          style: TextStyle(color: CustomColors.white),
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -321,7 +324,7 @@ class _EditAlarmState extends State<EditAlarmPage> with EditAlarmMixin {
                           ),
                         ),
                         onPressed: () {},
-                        child: Text("data"),
+                        child: Text("Definir"),
                       ),
                     ),
                   ],
